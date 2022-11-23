@@ -42,7 +42,7 @@ class SR_controller(app_manager.RyuApp):
         	'wsgi': WSGIApplication,
     	}
 	#Network topology graph
-	graph = Te_controller.graph
+	# graph = Te_controller.graph
 
 	#NEEDED TO CHANGE BEFORE RUNNING!
 	NUM_OF_OVS_SWITCHES = 2
@@ -277,7 +277,7 @@ class SR_controller(app_manager.RyuApp):
 				LOG.info("Datapath objects:")
 				LOG.info(self.dpid_to_datapath)
 				LOG.info("Northbound REST started!")
-			except Exception, e:
+			except Exception as e:
 				LOG.error("Error when start the NB API: %s" % e)
 
 
