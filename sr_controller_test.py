@@ -33,7 +33,7 @@ import logging
 import _thread
 
 LOG = logging.getLogger('ryu.app.SR_controller')
-LOG.setLevel(logging.DEBUG)
+LOG.setLevel(logging.INFO)
 
 DEBUG = 0
 
@@ -113,7 +113,7 @@ class SR_controller(app_manager.RyuApp):
             return None
 
     def fetch_parameters_from_file(self):
-        for l in open(self.PARAMETER_FILE, "r").readlines():
+        for l in open(self.PARAMETER_FILE, "read").readlines():
             if self._extract_value("n1_pub", l):
                 self.OVS_ADDR["0"] = self._extract_value("n1_pub", l)
             if self._extract_value("n5_pub", l):
@@ -240,7 +240,7 @@ class SR_controller(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(SR_controller, self).__init__(*args, **kwargs)
-        LOG.debug("kwargs:%s" % kwargs)
+        LOG.info("kwargs:%s" % kwargs)
         print(kwargs)
         self.dpset = kwargs['dpset']
         self.wsgi = kwargs['wsgi']
