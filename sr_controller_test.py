@@ -39,7 +39,7 @@ DEBUG = 0
 
 
 class SR_controller(app_manager.RyuApp):
-    CONTEXTS = {
+    _CONTEXTS = {
         'dpset': dpset.DPSet,
         'wsgi': WSGIApplication,
     }
