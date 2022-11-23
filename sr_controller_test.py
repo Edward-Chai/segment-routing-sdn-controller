@@ -240,7 +240,7 @@ class SR_controller(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(SR_controller, self).__init__(args, kwargs)
-        self.dpset = kwargs['dpset']
+        # self.dpset = kwargs['dpset']
         self.wsgi = kwargs['wsgi']
         self.fetch_parameters_from_file()
         self._construct_segments()
