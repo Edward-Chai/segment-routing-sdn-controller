@@ -15,7 +15,7 @@ class parameters(object):
 		self.segs = segs
 
 	def print_me(self):
-		print "========parameters========="
-		print "in_port=%s,out_port=%s,ipv6_dst=%s,sr_mac=%s,dst_mac=%s,segs=%s" % (self.in_port, self.out_port, self.ipv6_dst, self.sr_mac, self.dst_mac, self.segs)
+		print("========parameters=========")
+		print("in_port=%s,out_port=%s,ipv6_dst=%s,sr_mac=%s,dst_mac=%s,segs=%s" % (self.in_port, self.out_port, self.ipv6_dst, self.sr_mac, self.dst_mac, self.segs))
 
 
