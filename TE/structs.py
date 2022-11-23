@@ -113,7 +113,7 @@ class G(object):
 
     def __init__(self, **kwargs):
         self.G = {}
-        self.neighbor_last_refresh = sys.maxint
+        self.neighbor_last_refresh = float("inf")
 
     def getG(self):
         return self.G
