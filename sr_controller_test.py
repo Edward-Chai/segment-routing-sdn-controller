@@ -254,8 +254,8 @@ class SR_controller(app_manager.RyuApp):
         LOG.debug("ALL %s" % self.ALL_PARAMETERS)
         LOG.info("Controller started!")
 
-    def __del__(self):
-        _thread.exit()
+    # def __del__(self):
+    #     _thread.exit()
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
