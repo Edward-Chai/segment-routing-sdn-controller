@@ -30,6 +30,7 @@ from sr_flows_mgmt import SR_flows_mgmt
 from parameters import *
 from TE.te_controller import *
 import logging
+import _thread
 
 LOG = logging.getLogger('ryu.app.SR_controller')
 LOG.setLevel(logging.INFO)
@@ -254,7 +255,7 @@ class SR_controller(app_manager.RyuApp):
         LOG.info("Controller started!")
 
     def __del__(self):
-        thread.exit()
+        _thread.exit()
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
