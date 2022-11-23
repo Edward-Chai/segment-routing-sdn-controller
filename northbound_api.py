@@ -76,6 +76,7 @@ class North_api(ControllerBase):
         A = Actions()
         M = Match()
         SR = SR_flows_mgmt()
+        LOG.info("RECEIVED NB_API: insert_single_flow: (dpid, match, actions) = (%s,%s,%s)" % (dpid, match, actions))
         if len(post) < 3 or "actions" not in post or "dpid" not in post:
             LOG.info("INVALID POST values: %s" % post)
             return Response(status=404, headers=HEADERS)
