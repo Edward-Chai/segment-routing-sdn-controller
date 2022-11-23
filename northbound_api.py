@@ -86,7 +86,7 @@ class North_api(ControllerBase):
         if 'priority' in post:
             priority = int(post['priority'])
 
-        LOG.debug("RECEIVED NB_API: insert_single_flow: (dpid, match, actions) = (%s,%s,%s)" % (dpid, match, actions))
+        LOG.info("RECEIVED NB_API: insert_single_flow: (dpid, match, actions) = (%s,%s,%s)" % (dpid, match, actions))
         if not actions or not match:
             LOG.error("Actions or match fields are empty: actions = %s, match = %s" % (actions, match))
             return Response(status=500, headers=HEADERS)
