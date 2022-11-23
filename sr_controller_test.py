@@ -113,7 +113,7 @@ class SR_controller(app_manager.RyuApp):
             return None
 
     def fetch_parameters_from_file(self):
-        for l in open(self.PARAMETER_FILE, "read").readlines():
+        for l in open(self.PARAMETER_FILE, "r").readlines():
             if self._extract_value("n1_pub", l):
                 self.OVS_ADDR["0"] = self._extract_value("n1_pub", l)
             if self._extract_value("n5_pub", l):
