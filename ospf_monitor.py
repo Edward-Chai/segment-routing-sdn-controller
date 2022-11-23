@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 from ryu.base import app_manager
 from ryu.controller import ofp_event
@@ -30,10 +30,11 @@ import logging
 LOG = logging.getLogger('ryu.app.OSPF_monitor')
 LOG.setLevel(logging.DEBUG)
 
+
 class OSPF_monitor(object):
 
-  def __init__(self, *args, **kwargs):
-	super(OSPF_monitor, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(OSPF_monitor, self).__init__(*args, **kwargs)
 
-  def ospf_receive(self):
-	return
+    def ospf_receive(self):
+        return
