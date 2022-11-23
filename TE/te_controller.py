@@ -30,8 +30,8 @@ from webob import Response
 from northbound_match import Match as Match
 from northbound_actions import Actions as Actions
 from sr_flows_mgmt import SR_flows_mgmt as SR_flows_mgmt
-from structs import *
-from ospfv3 import *
+from TE.structs import *
+from TE.ospfv3 import *
 import json
 import time
 
