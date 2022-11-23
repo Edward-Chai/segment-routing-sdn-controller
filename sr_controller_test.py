@@ -239,7 +239,7 @@ class SR_controller(app_manager.RyuApp):
         self._add_flow(datapath, 0, match, actions)  # lowest priority
 
     def __init__(self, *args, **kwargs):
-        super(SR_controller, self).__init__(args, kwargs)
+        super(SR_controller, self).__init__(*args, **kwargs)
         LOG.debug("kwargs:%s" % kwargs)
         print(kwargs)
         self.dpset = kwargs['dpset']
