@@ -175,15 +175,16 @@ class SR_flows_mgmt(object):
 ################################
   def insert_single_flow(self, dpid, priority, match, actions):
     datapath, parser = self._get_datapath_from_dpid(dpid)
-    if not datapath:
-      LOG.error("Could not find datapth from dpid %s" % dpid)
-      return 1
-
+    # if not datapath:
+    #   LOG.error("Could not find datapth from dpid %s" % dpid)
+    #   return 1
+    #
     m = self._construct_match(parser, match)
     a = self._construct_actions(parser, actions)
 
-    LOG.debug("insert_single_flow (match, priority,action, datapath)=(%s,%s,%s,%s)" % (m, priority, a, datapath))
-    self._add_flow(datapath,priority,m,a)
+    # LOG.debug("insert_single_flow (match, priority,action, datapath)=(%s,%s,%s,%s)" % (m, priority, a, datapath))
+    LOG.debug("insert_single_flow (match, priority,action, datapath)=(%s,%s,%s)" % (m, priority, a))
+    # self._add_flow(datapath,priority,m,a)
     return 0
 
   def delete_single_flow(self, dpid, priority, match):
