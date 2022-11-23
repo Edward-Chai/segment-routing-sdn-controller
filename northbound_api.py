@@ -33,7 +33,7 @@ from sr_flows_mgmt import SR_flows_mgmt as SR_flows_mgmt
 from ospf_monitor import *
 import json
 
-LOG = logging.getLogger('ryu.app.North_api')
+LOG = logging.getLogger('ryu.app.SR_controller')
 LOG.setLevel(logging.INFO)
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
@@ -76,8 +76,13 @@ class North_api(ControllerBase):
         A = Actions()
         M = Match()
         SR = SR_flows_mgmt()
-        LOG.info("RECEIVED NB_API: insert_single_flow: (dpid, match, actions) = (%s,%s,%s)" % (dpid, match, actions))
         if len(post) < 3 or "actions" not in post or "dpid" not in post:
+            if len(post) < 3:
+                LOG.info("len(post) < 3")
+            if "actions" not in post:
+                LOG.info("actions not in post")
+            if "dpid" not in post:
+                LOG.info("dpid not in post")
             LOG.info("INVALID POST values: %s" % post)
             return Response(status=404, headers=HEADERS)
         actions = A.parse_actions_fields(post['actions'])
