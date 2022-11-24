@@ -35,6 +35,12 @@ import json
 
 LOG = logging.getLogger('ryu.app.Northbound_API')
 LOG.setLevel(logging.INFO)
+logging.basicConfig(level=logging.DEBUG,
+                    filename='new.log',
+                    filemode='w',
+                    format=
+                    '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+                    )
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST',
@@ -78,11 +84,12 @@ class North_api(ControllerBase):
         SR = SR_flows_mgmt()
         if len(post) < 3 or "actions" not in post or "dpid" not in post:
             if len(post) < 3:
-                LOG.info("len(post) < 3")
+                LOG.debug("len(post):%d < 3", len(post))
             if "actions" not in post:
-                LOG.info("actions not in post")
+                LOG.debug("actions not in post")
+                LOG.debug("post:%s", post)
             if "dpid" not in post:
-                LOG.info("dpid not in post")
+                LOG.debug("dpid not in post")
             LOG.info("INVALID POST values: %s" % post)
             return Response(status=404, headers=HEADERS)
         actions = A.parse_actions_fields(post['actions'])
