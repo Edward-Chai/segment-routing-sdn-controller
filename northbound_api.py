@@ -33,7 +33,7 @@ from sr_flows_mgmt import SR_flows_mgmt as SR_flows_mgmt
 from ospf_monitor import *
 import json
 
-LOG = logging.getLogger('ryu.app.SR_controller')
+LOG = logging.getLogger('ryu.app.Northbound_API')
 LOG.setLevel(logging.INFO)
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
