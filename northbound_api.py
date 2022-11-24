@@ -34,13 +34,8 @@ from ospf_monitor import *
 import json
 
 LOG = logging.getLogger('ryu.app.Northbound_API')
-LOG.setLevel(logging.INFO)
-logging.basicConfig(level=logging.DEBUG,
-                    filename='new.log',
-                    filemode='w',
-                    format=
-                    '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
-                    )
+LOG.setLevel(logging.DEBUG)
+
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST',
