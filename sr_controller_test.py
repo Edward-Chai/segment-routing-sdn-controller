@@ -33,7 +33,7 @@ import logging
 import _thread
 
 LOG = logging.getLogger('ryu.app.SR_controller')
-LOG.setLevel(logging.DEBUG)
+LOG.setLevel(logging.INFO)
 
 DEBUG = 0
 

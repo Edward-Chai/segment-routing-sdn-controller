@@ -20,7 +20,7 @@ from ryu.controller import ofp_event
 from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.controller import dpset
-from ryu.app.wsgi import ControllerBase, WSGIApplication
+from ryu.app.wsgi import ControllerBase, WSGIApplication, route
 from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet
@@ -73,6 +73,7 @@ class North_api(ControllerBase):
         return Response(content_type='application/json', headers=HEADERS)
 
     # Usage: curl --data "dpid=12345&match=123,456&actions=src_ip=1,dst_ip=2" http://0.0.0.0:8080/flow_mgmt/insert
+    @route("flow_mgmt", "/flow_mgmt/insert/", methods=['POST'])
     def insert_single_flow(self, req, **_kwargs):
         post = req.POST
         A = Actions()
