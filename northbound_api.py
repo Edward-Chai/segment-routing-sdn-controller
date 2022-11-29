@@ -87,7 +87,8 @@ class North_api(ControllerBase):
             if "dpid" not in post:
                 LOG.debug("dpid not in post")
             LOG.info("INVALID POST values: %s" % post)
-            return Response(body="len(post)="+str(len(post))+", post="+post,status=500, headers=HEADERS)
+            # return Response(body="len(post)="+str(len(post))+", post="+post,status=404, headers=HEADERS)
+            return Response(status=500, headers=HEADERS)
         actions = A.parse_actions_fields(post['actions'])
         match = M.parse_match_fields(post['match'])
         dpid = post['dpid']
