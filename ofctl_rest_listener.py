@@ -69,6 +69,7 @@ class SR_rest_api(app_manager.RyuApp):
         mapper = wsgi.mapper
 
         wsgi.registory['North_api'] = self.data
+        wsgi.register(North_api, self.data)
 
         flow_mgmt = "flow_mgmt"
         ospf_monitor = "ospf_monitor"
@@ -85,7 +86,7 @@ class SR_rest_api(app_manager.RyuApp):
                        conditions=dict(method=['POST']))
 
         # Usage: curl --data 'dpid=17779080870&match=ipv6_dst=2001::204:23ff:feb7:1e40,eth_type=0x86DD&actions=ipv6_dst=2001::208:204:23ff:feb7:1e40,ipv6_dst=2001::208:204:23ff:feb7:1e41,ipv6_dst=2001::208:204:23ff:feb7:1e42,output=1' http://0.0.0.0:8080/flow_mgmt/insert
-        uri = flow_mgmt + '/insert'
+        uri = flow_mgmt_path + '/insert'
         mapper.connect(flow_mgmt, uri,
                        controller=North_api, action='insert_single_flow',
                        conditions=dict(method=['POST']))
