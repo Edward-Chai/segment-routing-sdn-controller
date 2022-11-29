@@ -35,6 +35,7 @@ import json
 
 LOG = logging.getLogger('ryu.app.Northbound_API')
 LOG.setLevel(logging.DEBUG)
+LOG.propagate = 1
 
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
