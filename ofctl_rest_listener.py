@@ -74,6 +74,7 @@ class SR_rest_api(app_manager.RyuApp):
         ospf_monitor = "ospf_monitor"
         ospf_monitor_path = "/%s" % ospf_monitor
         flow_mgmt_path = '/%s' % flow_mgmt
+
         uri = flow_mgmt_path + '/delete'
         mapper.connect(flow_mgmt, uri,
                        controller=North_api, action='delete_single_flow',
@@ -86,7 +87,7 @@ class SR_rest_api(app_manager.RyuApp):
 
         # Usage: curl --data 'dpid=17779080870&match=ipv6_dst=2001::204:23ff:feb7:1e40,eth_type=0x86DD&actions=ipv6_dst=2001::208:204:23ff:feb7:1e40,ipv6_dst=2001::208:204:23ff:feb7:1e41,ipv6_dst=2001::208:204:23ff:feb7:1e42,output=1' http://0.0.0.0:8080/flow_mgmt/insert
         uri = flow_mgmt_path + '/insert'
-        mapper.connect(flow_mgmt, uri,
+        mapper.connect(flow_mgmt, flow_mgmt_path + '/insert',
                        controller=North_api, action='insert_single_flow',
                        conditions=dict(method=['POST']))
         uri = flow_mgmt_path + '/insert'
