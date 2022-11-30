@@ -69,12 +69,12 @@ class SR_rest_api(app_manager.RyuApp):
         mapper = wsgi.mapper
 
         wsgi.registory['North_api'] = self.data
-        wsgi.register(North_api, self.data)
+        # wsgi.register(North_api, self.data)
 
         flow_mgmt = "flow_mgmt"
         ospf_monitor = "ospf_monitor"
         ospf_monitor_path = "/%s" % ospf_monitor
-        flow_mgmt_path = '/%s' % flow_mgmt
+        flow_mgmt_path = '/flow_mgmt'
         uri = flow_mgmt_path + '/delete'
         mapper.connect(flow_mgmt, uri,
                        controller=North_api, action='delete_single_flow',

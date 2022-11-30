@@ -73,7 +73,7 @@ class North_api(ControllerBase):
         return Response(content_type='application/json', headers=HEADERS)
 
     # Usage: curl --data "dpid=12345&match=123,456&actions=src_ip=1,dst_ip=2" http://0.0.0.0:8080/flow_mgmt/insert
-    @route("flow_mgmt", "/flow_mgmt/insert/", methods=['POST'])
+    # @route("flow_mgmt", "/flow_mgmt/insert/", methods=['POST'])
     def insert_single_flow(self, req, **_kwargs):
         post = req.POST
         A = Actions()
