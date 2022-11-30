@@ -47,7 +47,7 @@ class SR_API_Controller(ControllerBase):
         return Response(content_type='application/json', body=body)
 
     def insert_single_flow(self, req, **kwargs):
-        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"))
+        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"), charset='utf8')
 
 
 
