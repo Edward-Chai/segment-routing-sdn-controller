@@ -33,7 +33,7 @@ import logging
 import paramiko
 import _thread
 
-LOG = logging.getLogger('ryu.app.SR_controller')
+LOG = logging.getLogger('ryu.app.rest_api_test')
 LOG.setLevel(logging.INFO)
 
 HEADERS = {
@@ -47,7 +47,9 @@ class SR_API_Controller(ControllerBase):
 
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
-        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK! Contents:"+req_body),
+        LOG.info(req_body)
+        print("req_body:%s", req_body)
+        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
 
