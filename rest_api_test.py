@@ -35,11 +35,15 @@ import _thread
 LOG = logging.getLogger('ryu.app.SR_controller')
 LOG.setLevel(logging.INFO)
 
+HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type',
+    'Content-Type': 'application/json'}
 
 class SR_API_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(SR_API_Controller, self).__init__(req, link, data, **config)
-
 
     def get_dpids(self, req, **_kwargs):
         dps = list(self.dpset.dps.keys())
@@ -47,7 +51,8 @@ class SR_API_Controller(ControllerBase):
         return Response(content_type='application/json', body=body)
 
     def insert_single_flow(self, req, **kwargs):
-        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"), charset='utf8')
+        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
+                        charset='utf8', headers=HEADERS)
 
 
 
