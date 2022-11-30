@@ -41,6 +41,7 @@ HEADERS = {
     'Access-Control-Allow-Methods': 'GET, POST',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
+
 class SR_API_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(SR_API_Controller, self).__init__(req, link, data, **config)
@@ -48,11 +49,16 @@ class SR_API_Controller(ControllerBase):
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
         LOG.info(req_body)
-        print("req_body:%s", req_body)
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
+        stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
+        print(stdout.read().decode())
+        ssh.close()
+
+        print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
-
-
 
 
 class REST_API_TEST(app_manager.RyuApp):
@@ -73,6 +79,7 @@ class REST_API_TEST(app_manager.RyuApp):
         mapper.connect('sr_rules', uri,
                        controller=SR_API_Controller, action='insert_single_flow',
                        conditions=dict(method=['POST']))
+
 
 '''
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
@@ -97,4 +104,3 @@ class REST_API_TEST(app_manager.RyuApp):
             except Exception as e:
                 LOG.error("Error when start the NB API: %s" % e)
                 '''
-
