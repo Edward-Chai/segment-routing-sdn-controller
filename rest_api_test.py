@@ -37,8 +37,8 @@ LOG.setLevel(logging.INFO)
 
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST',
-    'Access-Control-Allow-Headers': 'Origin, Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With',
     'Content-Type': 'application/json'}
 
 class SR_API_Controller(ControllerBase):
@@ -52,7 +52,7 @@ class SR_API_Controller(ControllerBase):
 
     def insert_single_flow(self, req, **kwargs):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
-                        charset='utf8', headerlist=HEADERS)
+                        charset='utf8', headers=HEADERS)
 
 
 
