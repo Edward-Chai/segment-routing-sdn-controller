@@ -30,6 +30,7 @@ from sr_flows_mgmt import SR_flows_mgmt
 from parameters import *
 from TE.te_controller import *
 import logging
+import paramiko
 import _thread
 
 LOG = logging.getLogger('ryu.app.SR_controller')
@@ -37,21 +38,16 @@ LOG.setLevel(logging.INFO)
 
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With',
-    'Content-Type': 'application/json'}
+    'Access-Control-Allow-Methods': 'GET, POST',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 class SR_API_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(SR_API_Controller, self).__init__(req, link, data, **config)
 
-    def get_dpids(self, req, **_kwargs):
-        dps = list(self.dpset.dps.keys())
-        body = json.dumps(dps)
-        return Response(content_type='application/json', body=body)
-
     def insert_single_flow(self, req, **kwargs):
-        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
+        post = req.POST
+        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK! Contents:"+post),
                         charset='utf8', headers=HEADERS)
 
 
