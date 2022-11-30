@@ -64,7 +64,7 @@ class REST_API_TEST(app_manager.RyuApp):
 
         mapper = wsgi.mapper
 
-        wsgi.registory['SR_API_Controller'] = self.data
+        # wsgi.registory['SR_API_Controller'] = self.data
 
         sr_rules_path = '/sr_rules'
         uri = sr_rules_path + '/insert'
