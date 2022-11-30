@@ -39,8 +39,7 @@ LOG.setLevel(logging.INFO)
 class SR_API_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(SR_API_Controller, self).__init__(req, link, data, **config)
-        self.dpset = data['dpset']
-        self.waiters = data['waiters']
+
 
     def get_dpids(self, req, **_kwargs):
         dps = list(self.dpset.dps.keys())
