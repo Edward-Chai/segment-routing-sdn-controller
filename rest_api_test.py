@@ -55,7 +55,7 @@ class SR_API_Controller(ControllerBase):
         LOG.info("--------------- Match Fields Start ---------------")
         for key in match_fields:
             LOG.info("Match_fields[%s]: %s", key, match_fields[key])
-        LOG.info("--------------- Match Fields End ---------------")
+        LOG.info("--------------- Match Fields End -----------------")
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
