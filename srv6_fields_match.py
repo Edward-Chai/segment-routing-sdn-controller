@@ -24,9 +24,9 @@ LOG.setLevel(logging.INFO)
 class SRv6_field_match(object):
     match_fields = {  # all supported match fields. eg, curl -d "match="in_port=1,out_port=2,nw_src=::01""
         "host_ip": None,
-        "dst_ip": None,
-        "bhvrK": None,
-        "bhvrV": None,
+        "seg": None,
+        "action": None,
+        "params": None,
         "segs": None,
     }
 
