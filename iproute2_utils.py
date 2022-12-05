@@ -32,7 +32,7 @@ class iproute2_utils(object):
         ssh_config = ssh_configs.readline()
         while ssh_config:
             configs = ssh_config.split()
-            LOG.info("Len(configs):%d, Content: ", len(configs), configs)
+            # LOG.info("Len(configs):%d, Content: ", len(configs), configs)
             clientinfo = {
                 "hostname": configs[0],
                 "port": configs[1],
@@ -40,7 +40,7 @@ class iproute2_utils(object):
                 "password": configs[3].split("\n")[0]
             }
             self.clientInfoList.append(clientinfo)
-            print("client info loaded:", clientinfo)
+            LOG.info("client info loaded:", clientinfo)
         ssh_configs.close()
-        print("client info all loaded:", self.clientInfoList)
+        LOG.info("client info all loaded:", self.clientInfoList)
 
