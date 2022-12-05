@@ -32,6 +32,7 @@ from TE.te_controller import *
 import logging
 import paramiko
 from srv6_fields_match import SRv6_field_match
+from iproute2_utils import iproute2_utils
 
 LOG = logging.getLogger('ryu.app.rest_api_test')
 LOG.setLevel(logging.INFO)
@@ -80,6 +81,7 @@ class REST_API_TEST(app_manager.RyuApp):
         mapper = wsgi.mapper
 
         # wsgi.registory['SR_API_Controller'] = self.data
+        iproute2u = iproute2_utils()
 
         sr_rules_path = '/sr_rules'
         uri = sr_rules_path + '/insert'
