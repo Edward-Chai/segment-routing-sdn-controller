@@ -54,7 +54,7 @@ class SR_API_Controller(ControllerBase):
         match_fields = SRv6_match.parse_match_fields(req_body)
         LOG.info("--------------- Match Fields Start ---------------")
         for key in match_fields:
-            LOG.info("Match_fields[%s]: %s", key, match_fields[key])
+            LOG.info("%s:   %s", key, match_fields[key])
         LOG.info("--------------- Match Fields End -----------------")
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
