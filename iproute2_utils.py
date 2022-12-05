@@ -1,3 +1,8 @@
+"""
+SRv6 Local: SID, bhvrK(action), bhvrV
+SRv6 Encap: IPv6_dst, mode(encap,decap), segs_list
+"""
+
 import paramiko
 import logging
 
