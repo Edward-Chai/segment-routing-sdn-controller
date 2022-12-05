@@ -33,24 +33,24 @@ class iproute2_utils(object):
         if existence_flag == 0:
             LOG.error("No host ip found!")
         else:
-            # ssh = paramiko.SSHClient()
-            # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            # ssh.connect(hostname=self.clientInfo['hostname'],
-            #             port=self.clientInfo['port'],
-            #             username=self.clientInfo['username'],
-            #             password=self.clientInfo['password'])
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname=self.clientInfo['hostname'],
+                        port=self.clientInfo['port'],
+                        username=self.clientInfo['username'],
+                        password=self.clientInfo['password'])
             if match_fields['action'] == "encap":
                 command = 'ip -6 route add '+ match_fields['seg'] + " encap seg6 mode " +match_fields['action']+ " segs " + match_fields['segs'] + " dev ens160"
-                # stdin, stdout, stderr = ssh.exec_command(command)
-                # print("stdout: ", stdout.read().decode())
-                # print("stdeer: ", stderr.read().decode())
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print("stdout: ", stdout.read().decode())
+                print("stdeer: ", stderr.read().decode())
             else:
                 command = 'ip -6 route add '+ match_fields['seg'] + " encap seg6local action " + match_fields['action'] + " nh6 " + match_fields['params'] + " dev ens160"
-                # stdin, stdout, stderr = ssh.exec_command(command)
-                # print("stdout: ", stdout.read().decode())
-                # print("stdeer: ", stderr.read().decode())
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print("stdout: ", stdout.read().decode())
+                print("stdeer: ", stderr.read().decode())
             print("command: ", command)
-            # ssh.close()
+            ssh.close()
 
     def __init__(self, **kwagrs):
         super(iproute2_utils, self).__init__()
