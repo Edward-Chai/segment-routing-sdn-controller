@@ -30,7 +30,7 @@ class iproute2_utils(object):
 
         ssh_configs = open("ssh_clients", "r")
         ssh_config = ssh_configs.readline()
-        while ssh_config:
+        while ssh_config and ssh_config != '':
             configs = ssh_config.split()
             # LOG.info("Len(configs):%d, Content: ", len(configs), configs)
             clientinfo = {
@@ -41,6 +41,7 @@ class iproute2_utils(object):
             }
             self.clientInfoList.append(clientinfo)
             LOG.info("client info loaded:", clientinfo)
+            ssh_config = ssh_configs.readline()
         ssh_configs.close()
         LOG.info("client info all loaded:", self.clientInfoList)
 
