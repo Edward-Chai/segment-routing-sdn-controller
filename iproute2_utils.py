@@ -37,7 +37,7 @@ class iproute2_utils(object):
                 "hostname": configs[0],
                 "port": configs[1],
                 "username": configs[2],
-                "password": configs[3]
+                "password": configs[3].split("\n")[0]
             }
             self.clientInfoList.append(clientinfo)
             print("client info loaded:", clientinfo)
