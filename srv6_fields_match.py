@@ -45,6 +45,7 @@ class SRv6_field_match(object):
                 tokens[count - 1].join(tokens[count])
                 tokens.pop(count)
                 count -= 1
+        LOG.info("Tokens:"+tokens)
 
         for t in tokens:
             try:
