@@ -6,12 +6,12 @@ LOG.setLevel(logging.INFO)
 
 class iproute2_utils(object):
 
-    # clientInfo = {
-    #     "hostname": None,
-    #     "port": None,
-    #     "username": None,
-    #     "password": None
-    # }
+    clientInfo = {
+        "hostname": None,
+        "port": None,
+        "username": None,
+        "password": None
+    }
 
     clientInfoList = []
 
@@ -25,6 +25,8 @@ class iproute2_utils(object):
 
     def __init__(self, **kwagrs):
         super(iproute2_utils, self).__init__()
+        for key in self.clientInfo:
+            self.clientInfo[key] = None
 
         ssh_configs = open("ssh_clients", "r")
         ssh_config = ssh_configs.readline()
