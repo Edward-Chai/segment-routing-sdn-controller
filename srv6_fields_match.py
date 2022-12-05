@@ -34,7 +34,7 @@ class SRv6_field_match(object):
     def get_match_fields(self):
         return match_fields
 
-    def parse_match_fields(self, str):
+    def parse_match_fields(str):
         LOG.debug("Match.parse_match_field, str=%s" % str)
         str = str.sprit('b\'')
         str = str.sprit('\'')
