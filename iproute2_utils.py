@@ -15,13 +15,24 @@ class iproute2_utils(object):
 
     clientInfoList = []
 
-    def insert_srv6_rule_local(self, command):
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
-        stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
-        print(stdout.read().decode())
-        ssh.close()
+    def insert_srv6_rule_local(self, match_fields):
+        existence_flag = 0
+        for count in range(len(self.clientInfoList)):
+            if self.clientInfoList[count]['hostname'] == match_fields['host_ip']:
+                existence_flag = 1
+                self.clientInfo = self.clientInfoList[count]
+        if existence_flag == 0:
+            LOG.error("No host ip found!")
+        else:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname=self.clientInfo['hostname'],
+                        port=self.clientInfo['port'],
+                        username=self.clientInfo['username'],
+                        password=self.clientInfo['password'])
+            stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
+            print(stdout.read().decode())
+            ssh.close()
 
     def __init__(self, **kwagrs):
         super(iproute2_utils, self).__init__()

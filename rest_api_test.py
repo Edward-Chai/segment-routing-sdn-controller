@@ -44,6 +44,7 @@ HEADERS = {
 
 
 class SR_API_Controller(ControllerBase):
+
     def __init__(self, req, link, data, **config):
         super(SR_API_Controller, self).__init__(req, link, data, **config)
 
@@ -52,6 +53,7 @@ class SR_API_Controller(ControllerBase):
         LOG.debug(req_body)
         # req_body_dec = req_body.decode('utf-8')
         SRv6_match = SRv6_field_match()
+        iproute2u = iproute2_utils()
         match_fields = SRv6_match.parse_match_fields(req_body)
         LOG.info("--------------- Match Fields Start ---------------")
         for key in match_fields:
@@ -63,6 +65,7 @@ class SR_API_Controller(ControllerBase):
         # stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
         # print(stdout.read().decode())
         # ssh.close()
+        iproute2u.insert_srv6_rule_local(match_fields)
 
         # print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
@@ -79,9 +82,7 @@ class REST_API_TEST(app_manager.RyuApp):
         wsgi = kwargs['wsgi']
 
         mapper = wsgi.mapper
-
         # wsgi.registory['SR_API_Controller'] = self.data
-        iproute2u = iproute2_utils()
 
         sr_rules_path = '/sr_rules'
         uri = sr_rules_path + '/insert'
