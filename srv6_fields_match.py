@@ -50,8 +50,9 @@ class SRv6_field_match(object):
                 LOG.info("Tokens[count-1(%d)]:%s", count - 1, tokens[count - 1])
                 tokens.pop(count)
                 print("Tokens: ", tokens)
-                count = count - 1
+                count -= 1
                 LOG.info("Tokens[count+1(%d)]:%s", count + 1, tokens[count + 1])
+            count += 1
 
 
         # LOG.info("Tokens:", tokens)
