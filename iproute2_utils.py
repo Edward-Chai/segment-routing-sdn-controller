@@ -1,13 +1,17 @@
 import paramiko
+import logging
+
+LOG = logging.getLogger('ryu.app.iproute2_utils')
+LOG.setLevel(logging.INFO)
 
 class iproute2_utils(object):
 
-    clientInfo = {
-        "hostname": None,
-        "port": None,
-        "username": None,
-        "password": None
-    }
+    # clientInfo = {
+    #     "hostname": None,
+    #     "port": None,
+    #     "username": None,
+    #     "password": None
+    # }
 
     clientInfoList = []
 
@@ -21,3 +25,18 @@ class iproute2_utils(object):
 
     def __init__(self, **kwagrs):
         super(iproute2_utils, self).__init__()
+
+        ssh_configs = open("ssh_clients", "r")
+        ssh_config = ssh_configs.readline()
+        while ssh_config:
+            configs = ssh_config.split('\t')
+            clientinfo = {
+                "hostname": configs[0],
+                "port": configs[1],
+                "username": configs[2],
+                "password": configs[3]
+            }
+            self.clientInfoList.append(clientinfo)
+            print("client info loaded:", clientinfo)
+        print("client info all loaded:", self.clientInfoList)
+
