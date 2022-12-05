@@ -39,7 +39,7 @@ class SRv6_field_match(object):
         str_dec = str_enc.decode()
         # str = str.strip('b\'')
         # str = str.strip('\'')
-        LOG.info("POST in str: " % str_dec)
+        LOG.info("POST in str: " + str_dec)
         tokens = str_dec.split(',')
         for t in tokens:
             try:
