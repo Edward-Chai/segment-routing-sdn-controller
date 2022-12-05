@@ -34,13 +34,13 @@ class SRv6_field_match(object):
     def get_match_fields(self):
         return match_fields
 
-    def parse_match_fields(self, str):
-        LOG.info("Match.parse_match_field, str=%s" % str)
-        str = str.decode('utf-8')
+    def parse_match_fields(self, str_enc):
+        LOG.info("Match.parse_match_field, str=%s" % str_enc)
+        str_dec = str_enc.decode()
         # str = str.strip('b\'')
         # str = str.strip('\'')
-        LOG.info("POST in str: " % str)
-        tokens = str.split(',')
+        LOG.info("POST in str: " % str_dec)
+        tokens = str_dec.split(',')
         for t in tokens:
             try:
                 key = t.split("=")[0]
