@@ -49,7 +49,7 @@ class iproute2_utils(object):
                 # stdin, stdout, stderr = ssh.exec_command(command)
                 # print("stdout: ", stdout.read().decode())
                 # print("stdeer: ", stderr.read().decode())
-            print("command:%s", command)
+            print("command: ", command)
             # ssh.close()
 
     def __init__(self, **kwagrs):
