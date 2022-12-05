@@ -36,8 +36,8 @@ class SRv6_field_match(object):
 
     def parse_match_fields(self, str):
         LOG.debug("Match.parse_match_field, str=%s" % str)
-        str = str.strip('b\'')
-        str = str.strip('\'')
+        # str = str.strip('b\'')
+        # str = str.strip('\'')
         LOG.info("POST: " % str)
         tokens = str.split(',')
         for t in tokens:
