@@ -31,7 +31,7 @@ class SRv6_field_match(object):
     }
 
     def get_match_fields(self):
-        return match_fields
+        return self.match_fields
 
     def parse_match_fields(self, str_enc):
         LOG.debug("Match.parse_match_field, str=%s" % str_enc)
