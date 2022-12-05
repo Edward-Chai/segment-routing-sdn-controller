@@ -31,7 +31,7 @@ class iproute2_utils(object):
         ssh_configs = open("ssh_clients", "r")
         ssh_config = ssh_configs.readline()
         while ssh_config:
-            configs = ssh_config.split('\t')
+            configs = ssh_config.split()
             LOG.info("Len(configs):%d, Content: ", len(configs), configs)
             clientinfo = {
                 "hostname": configs[0],
