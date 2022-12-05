@@ -34,18 +34,18 @@ class SRv6_field_match(object):
         return match_fields
 
     def parse_match_fields(self, str_enc):
-        LOG.info("Match.parse_match_field, str=%s" % str_enc)
+        LOG.debug("Match.parse_match_field, str=%s" % str_enc)
         str_dec = str_enc.decode()
         # str = str.strip('b\'')
         # str = str.strip('\'')
-        LOG.info("POST in str: " + str_dec)
+        LOG.debug("POST in str: " + str_dec)
         tokens = str_dec.split(',')
         # LOG.info("Tokens_pre:", tokens)
         for count in range(len(tokens)):
             if tokens[count].find("=") == -1:
-                LOG.info("Tokens[count(%d)]:%s", count, tokens[count])
+                LOG.debug("Tokens[count(%d)]:%s", count, tokens[count])
                 tokens[count - 1] += "," + tokens[count]
-                LOG.info("Tokens[count-1(%d)]:%s", count - 1, tokens[count - 1])
+                LOG.debug("Tokens[count-1(%d)]:%s", count - 1, tokens[count - 1])
                 tokens.pop(count)
                 count -= 1
 
