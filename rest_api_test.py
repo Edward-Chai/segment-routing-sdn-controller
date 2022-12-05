@@ -49,7 +49,7 @@ class SR_API_Controller(ControllerBase):
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
         LOG.info(req_body)
-        match_fields = SRv6_field_match.parse_match_fields(req_body)
+        match_fields = SRv6_field_match.parse_match_fields(str=req_body)
         LOG.info("Match_fields:" + match_fields)
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
