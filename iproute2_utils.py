@@ -32,7 +32,7 @@ class iproute2_utils(object):
                         password=self.clientInfo['password'])
             stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
             print(stdout.read().decode())
-            print("stdin:%s, stdout:%s, stderr:%s", stdin, stdout, stderr)
+            # print("stdin:%s, stdout:%s, stderr:%s", stdin, stdout, stderr)
             ssh.close()
 
     def __init__(self, **kwagrs):
