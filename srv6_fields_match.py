@@ -42,6 +42,7 @@ class SRv6_field_match(object):
         tokens = str_dec.split(',')
         LOG.info("Tokens_pre:", tokens)
         for count in range(len(tokens)):
+            print("count: %d", count)
             if tokens[count].find("=") == -1:
                 LOG.info("Tokens[count(%d)]:%s", count, tokens[count])
                 tokens[count - 1] += "," + tokens[count]
