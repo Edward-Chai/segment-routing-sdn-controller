@@ -40,5 +40,6 @@ class iproute2_utils(object):
             }
             self.clientInfoList.append(clientinfo)
             print("client info loaded:", clientinfo)
+        ssh_configs.close()
         print("client info all loaded:", self.clientInfoList)
 
