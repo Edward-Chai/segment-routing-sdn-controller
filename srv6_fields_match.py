@@ -40,7 +40,7 @@ class SRv6_field_match(object):
         # str = str.strip('\'')
         LOG.info("POST in str: " + str_dec)
         tokens = str_dec.split(',')
-        LOG.info("Tokens_pre:" + tokens)
+        LOG.info("Tokens_pre:" % tokens)
         for count in range(len(tokens)):
             if tokens[count][0] == ",":
                 tokens[count - 1].join(tokens[count])
