@@ -41,7 +41,8 @@ class SRv6_field_match(object):
         LOG.debug("POST in str: " + str_dec)
         tokens = str_dec.split(',')
         LOG.info("Tokens_pre:", tokens)
-        for count in range(len(tokens)):
+        count = 0
+        while count < len(tokens):
             print("count: %d", count)
             if tokens[count].find("=") == -1:
                 LOG.info("Tokens[count(%d)]:%s", count, tokens[count])
