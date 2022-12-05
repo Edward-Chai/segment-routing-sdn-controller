@@ -21,7 +21,6 @@ LOG = logging.getLogger('ryu.app.srv6_field_match')
 LOG.setLevel(logging.INFO)
 
 
-
 class SRv6_field_match(object):
     match_fields = {  # all supported match fields. eg, curl -d "match="in_port=1,out_port=2,nw_src=::01""
         "router_id": None,
@@ -41,6 +40,12 @@ class SRv6_field_match(object):
         # str = str.strip('\'')
         LOG.info("POST in str: " + str_dec)
         tokens = str_dec.split(',')
+        for count in range(len(tokens)):
+            if tokens[count][0] == ",":
+                tokens[count - 1].join(tokens[count])
+                tokens.pop(count)
+                count -= 1
+
         for t in tokens:
             try:
                 key = t.split("=")[0]
