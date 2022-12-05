@@ -42,12 +42,12 @@ class SRv6_field_match(object):
         tokens = str_dec.split(',')
         LOG.info("Tokens_pre:", tokens)
         for count in range(len(tokens)):
-            if tokens[count][0] == ",":
+            if tokens[count].find("=") == -1:
                 tokens[count - 1].join(tokens[count])
                 tokens.pop(count)
                 count -= 1
                 LOG.info("Tokens[%d]:%s", count, tokens[count])
-        LOG.info("Tokens:"+tokens)
+        LOG.info("Tokens:", tokens)
 
         for t in tokens:
             try:
