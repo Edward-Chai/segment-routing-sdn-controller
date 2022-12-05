@@ -34,10 +34,10 @@ class SRv6_field_match(object):
     def get_match_fields(self):
         return match_fields
 
-    def parse_match_fields(str):
+    def parse_match_fields(self, str):
         LOG.debug("Match.parse_match_field, str=%s" % str)
-        str = str.sprit('b\'')
-        str = str.sprit('\'')
+        str = str.strip('b\'')
+        str = str.strip('\'')
         LOG.info("POST: " % str)
         tokens = str.split(',')
         for t in tokens:
@@ -55,7 +55,7 @@ class SRv6_field_match(object):
         return self.match_fields
 
     def __init__(self, **kwagrs):
-        super(Match, self).__init__()
+        super(SRv6_field_match, self).__init__()
         for key in self.match_fields:
             self.match_fields[key] = None
         for key in kwagrs:
