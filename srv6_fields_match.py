@@ -44,7 +44,7 @@ class SRv6_field_match(object):
         for count in range(len(tokens)):
             if tokens[count].find("=") == -1:
                 LOG.info("Tokens[count(%d)]:%s", count, tokens[count])
-                tokens[count - 1] += tokens[count]
+                tokens[count - 1] += "," + tokens[count]
                 LOG.info("Tokens[count-1(%d)]:%s", count - 1, tokens[count - 1])
                 tokens.pop(count)
                 count -= 1
