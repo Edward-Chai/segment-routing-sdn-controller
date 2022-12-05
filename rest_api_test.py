@@ -31,7 +31,7 @@ from parameters import *
 from TE.te_controller import *
 import logging
 import paramiko
-import _thread
+from srv6_fields_match import SRv6_field_match
 
 LOG = logging.getLogger('ryu.app.rest_api_test')
 LOG.setLevel(logging.INFO)
@@ -49,12 +49,14 @@ class SR_API_Controller(ControllerBase):
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
         LOG.info(req_body)
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
-        stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
-        print(stdout.read().decode())
-        ssh.close()
+        match_fields = SRv6_field_match.parse_match_fields(req_body)
+        LOG.info("Match_fields:" + match_fields)
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
+        # stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
+        # print(stdout.read().decode())
+        # ssh.close()
 
         print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
