@@ -52,7 +52,9 @@ class SR_API_Controller(ControllerBase):
         # req_body_dec = req_body.decode('utf-8')
         SRv6_match = SRv6_field_match()
         match_fields = SRv6_match.parse_match_fields(req_body)
-        LOG.info("Match_fields:", match_fields)
+        for key in match_fields:
+            LOG.info("Match_fields[%s]: %s", key, match_fields[key])
+
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
@@ -60,7 +62,7 @@ class SR_API_Controller(ControllerBase):
         # print(stdout.read().decode())
         # ssh.close()
 
-        print("req_body:", req_body)
+        # print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
