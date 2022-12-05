@@ -35,10 +35,11 @@ class SRv6_field_match(object):
         return match_fields
 
     def parse_match_fields(self, str):
-        LOG.debug("Match.parse_match_field, str=%s" % str)
+        LOG.info("Match.parse_match_field, str=%s" % str)
+        str = str.decode('utf-8')
         # str = str.strip('b\'')
         # str = str.strip('\'')
-        LOG.info("POST: " % str)
+        LOG.info("POST in str: " % str)
         tokens = str.split(',')
         for t in tokens:
             try:
