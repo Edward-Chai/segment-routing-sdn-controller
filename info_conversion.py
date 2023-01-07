@@ -387,7 +387,7 @@ class info_conversion(object):
             dict['dcFuncList'][lineIdx]['funcParams'][0]['cmdVal'] = lineContents[5]
             if len(lineContents) > 6:
                 for idx in range(6, len(lineContents)):
-                    dict['dcFuncList'].append(dict['dcFuncList'][0])
+                    dict['dcFuncList'][lineIdx]['funcParams'].append(dict['dcFuncList'][lineIdx]['funcParams'][0])
                     tmpLine = lineContents[idx].strip("=")
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdKey'] = tmpLine[0]
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdVal'] = tmpLine[1].strip("\"")
