@@ -90,6 +90,7 @@ class funcMgr(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(funcMgr, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
+        funcHandlingUtil = funcHandling()
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
