@@ -49,12 +49,7 @@ class funcHandling(ControllerBase):
 
     def __init__(self, req, link, data, **config):
         super(funcHandling, self).__init__(req, link, data, **config)
-        os.chdir("/home/edward/funcInfo/")
-        f = open("funcInfoList", "r")
-        infoConversion = info_conversion()
-        funcInfo = f.readlines()
-        dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
-        LOG.info(dcFuncInfoDict)
+
 
 
 
@@ -90,7 +85,13 @@ class funcMgr(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(funcMgr, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
-        funcHandlingUtil = funcHandling()
+
+        os.chdir("/home/edward/funcInfo/")
+        f = open("funcInfoList", "r")
+        infoConversion = info_conversion()
+        funcInfo = f.readlines()
+        dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
+        LOG.info(dcFuncInfoDict)
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
