@@ -378,6 +378,7 @@ class info_conversion(object):
                 dict['dcFuncList'].append(dict['dcFuncList'][0])
 
             lineContents = lines[lineIdx].strip(",")
+            print("lineContents: ", lineContents)
             dict['dcFuncList'][lineIdx]['funcId'] = lineContents[0]
             dict['dcFuncList'][lineIdx]['orientation'] = lineContents[1]
             dict['dcFuncList'][lineIdx]['Customization']['VideoQual'] = lineContents[2]
