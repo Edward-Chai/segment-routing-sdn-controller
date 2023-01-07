@@ -377,7 +377,7 @@ class info_conversion(object):
             if lineIdx > 1:
                 dict['dcFuncList'].append(dict['dcFuncList'][0])
 
-            lineContents = lines[lineIdx].strip(',')
+            lineContents = lines[lineIdx].split(',')
             print("lines[lineIdx]: ", lines[lineIdx])
             print("lineContents: ", lineContents)
             dict['dcFuncList'][lineIdx]['funcId'] = lineContents[0]
@@ -390,7 +390,7 @@ class info_conversion(object):
             if len(lineContents) > 6:
                 for idx in range(6, len(lineContents)):
                     dict['dcFuncList'][lineIdx]['funcParams'].append(dict['dcFuncList'][lineIdx]['funcParams'][0])
-                    tmpLine = lineContents[idx].strip("=")
+                    tmpLine = lineContents[idx].split("=")
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdKey'] = tmpLine[0]
                     print(len(tmpLine))
                     print("lineContents[idx]:", lineContents[idx])
