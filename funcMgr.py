@@ -32,7 +32,9 @@ from TE.te_controller import *
 import logging
 import paramiko
 from srv6_fields_match import SRv6_field_match
+from info_conversion import info_conversion
 from iproute2_utils import iproute2_utils
+import os
 
 LOG = logging.getLogger('ryu.app.rest_api_test')
 LOG.setLevel(logging.INFO)
@@ -43,10 +45,18 @@ HEADERS = {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 
-class SR_API_Controller(ControllerBase):
+class funcHandling(ControllerBase):
 
     def __init__(self, req, link, data, **config):
-        super(SR_API_Controller, self).__init__(req, link, data, **config)
+        super(funcHandling, self).__init__(req, link, data, **config)
+        os.chdir("/home/edward/funcInfo/")
+        f = open("funcInfoList", "r")
+        infoConversion = info_conversion()
+        funcInfo = f.readlines()
+        dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
+        LOG.info(dcFuncInfoDict)
+
+
 
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
@@ -72,13 +82,13 @@ class SR_API_Controller(ControllerBase):
                         charset='utf8', headers=HEADERS)
 
 
-class REST_API_TEST(app_manager.RyuApp):
+class funcMgr(app_manager.RyuApp):
     _CONTEXTS = {
         'wsgi': WSGIApplication,
     }
 
     def __init__(self, *args, **kwargs):
-        super(REST_API_TEST, self).__init__(*args, **kwargs)
+        super(funcMgr, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
 
         mapper = wsgi.mapper
@@ -91,7 +101,7 @@ class REST_API_TEST(app_manager.RyuApp):
                        conditions=dict(method=['POST']))
         monitor_path = '/monitor'
         uri = monitor_path + 'dcScope'
-        mapper.connect('monitor', uri,
+        mapper.connect('sr_rules', uri,
                        controller=SR_API_Controller, action='insert_single_flow',
                        conditions=dict(method=['POST']))
 
