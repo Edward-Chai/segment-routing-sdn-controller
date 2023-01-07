@@ -375,7 +375,7 @@ class info_conversion(object):
         dict = copy.copy(function_Info_Synchronization)
         for lineIdx in range(len(lines)):
             if lineIdx > 1:
-                dict['dcFuncList'].append(dict['dcFuncList'][0])
+                dict['dcFuncList'].append(copy.deepcopy(dict['dcFuncList'][0]))
 
             lineContents = lines[lineIdx].split(',')
             print("lines[lineIdx]: ", lines[lineIdx])
@@ -389,7 +389,7 @@ class info_conversion(object):
             dict['dcFuncList'][lineIdx]['funcParams'][0]['cmdVal'] = lineContents[5]
             if len(lineContents) > 6:
                 for idx in range(6, len(lineContents)):
-                    dict['dcFuncList'][lineIdx]['funcParams'].append(dict['dcFuncList'][lineIdx]['funcParams'][0])
+                    dict['dcFuncList'][lineIdx]['funcParams'].append(copy.deepcopy(dict['dcFuncList'][lineIdx]['funcParams'][0]))
                     tmpLine = lineContents[idx].split("=")
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdKey'] = tmpLine[0]
                     print(len(tmpLine))
