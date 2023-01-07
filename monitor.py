@@ -31,12 +31,10 @@ from parameters import *
 from TE.te_controller import *
 import logging
 import paramiko
-from srv6_fields_match import SRv6_field_match
 from info_conversion import info_conversion
 from iproute2_utils import iproute2_utils
-import os
 
-LOG = logging.getLogger('ryu.app.rest_api_test')
+LOG = logging.getLogger('ryu.app.monitor')
 LOG.setLevel(logging.INFO)
 
 HEADERS = {
@@ -45,26 +43,18 @@ HEADERS = {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 
-class funcHandling(ControllerBase):
+class Monitor(ControllerBase):
 
     def __init__(self, req, link, data, **config):
-        super(funcHandling, self).__init__(req, link, data, **config)
-        os.chdir("/home/edward/funcInfo/")
-        f = open("funcInfoList", "r")
-        infoConversion = info_conversion()
-        funcInfo = f.readlines()
-        dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
-        LOG.info(dcFuncInfoDict)
-
-
+        super(Monitor, self).__init__(req, link, data, **config)
 
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
         # req_body_dec = req_body.decode('utf-8')
-        SRv6_match = SRv6_field_match()
+        infoConversion = info_conversion()
         iproute2u = iproute2_utils()
-        match_fields = SRv6_match.parse_match_fields(req_body)
+        match_fields = infoConversion.parse_match_fields(req_body)
         LOG.info("--------------- Match Fields Start ---------------")
         for key in match_fields:
             LOG.info("%s:   %s", key, match_fields[key])
@@ -81,29 +71,32 @@ class funcHandling(ControllerBase):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
+    def dc_scope_to_intra(self, req, **kwargs):
+        req_body = req.body
+        LOG.debug(req_body)
 
-class funcMgr(app_manager.RyuApp):
+
+class InitMonitor(app_manager.RyuApp):
     _CONTEXTS = {
         'wsgi': WSGIApplication,
     }
 
     def __init__(self, *args, **kwargs):
-        super(funcMgr, self).__init__(*args, **kwargs)
+        super(InitMonitor, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        # sr_rules_path = '/sr_rules'
-        # uri = sr_rules_path + '/insert'
-        # mapper.connect('sr_rules', uri,
-        #                controller=SR_API_Controller, action='insert_single_flow',
-        #                conditions=dict(method=['POST']))
-        # monitor_path = '/monitor'
-        # uri = monitor_path + 'dcScope'
-        # mapper.connect('sr_rules', uri,
-        #                controller=SR_API_Controller, action='insert_single_flow',
-        #                conditions=dict(method=['POST']))
+        monitor_path = '/monitor'
+        uri = monitor_path + 'dcScope'
+        mapper.connect('monitor', uri,
+                       controller=Monitor, action='dc_scope_to_intra',
+                       conditions=dict(method=['POST']))
+        uri = monitor_path + 'intra'
+        mapper.connect('monitor', uri,
+                       controller=Monitor, action='intra_scope_to_inter',
+                       conditions=dict(method=['POST']))
 
 '''
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
