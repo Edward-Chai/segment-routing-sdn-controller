@@ -391,7 +391,7 @@ class info_conversion(object):
                     tmpLine = lineContents[idx].strip("=")
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdKey'] = tmpLine[0]
                     print(len(tmpLine))
-                    print("tmpLine:", tmpLine)
+                    print("lineContents[idx]:", lineContents[idx])
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdVal'] = tmpLine[1].strip('"')
         return dict
 
