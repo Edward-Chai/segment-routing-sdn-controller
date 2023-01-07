@@ -377,7 +377,8 @@ class info_conversion(object):
             if lineIdx > 1:
                 dict['dcFuncList'].append(dict['dcFuncList'][0])
 
-            lineContents = lines[lineIdx].strip(",")
+            lineContents = lines[lineIdx].strip(',')
+            print("lines[lineIdx]: ", lines[lineIdx])
             print("lineContents: ", lineContents)
             dict['dcFuncList'][lineIdx]['funcId'] = lineContents[0]
             dict['dcFuncList'][lineIdx]['orientation'] = lineContents[1]
