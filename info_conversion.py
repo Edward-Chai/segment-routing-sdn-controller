@@ -394,7 +394,7 @@ class info_conversion(object):
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdKey'] = tmpLine[0]
                     print(len(tmpLine))
                     print("lineContents[idx]:", lineContents[idx])
-                    dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdVal'] = tmpLine[1].strip('"')
+                    dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdVal'] = tmpLine[1].strip('"\n')
         return dict
 
     def DCScopeToIntra(self, str_enc):
