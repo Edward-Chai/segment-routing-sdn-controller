@@ -380,9 +380,9 @@ class info_conversion(object):
             lineContents = lines[lineIdx].strip(",")
             dict['dcFuncList'][lineIdx]['funcId'] = lineContents[0]
             dict['dcFuncList'][lineIdx]['orientation'] = lineContents[1]
-            dict['dcFuncList'][lineIdx]['customization']['VideoQual'] = lineContents[2]
-            dict['dcFuncList'][lineIdx]['customization']['SubLang'] = lineContents[3]
-            dict['dcFuncList'][lineIdx]['customization']['AudioLang'] = lineContents[4]
+            dict['dcFuncList'][lineIdx]['Customization']['VideoQual'] = lineContents[2]
+            dict['dcFuncList'][lineIdx]['Customization']['SubLang'] = lineContents[3]
+            dict['dcFuncList'][lineIdx]['Customization']['AudioLang'] = lineContents[4]
             dict['dcFuncList'][lineIdx]['funcParams'][0]['cmdKey'] = "base"
             dict['dcFuncList'][lineIdx]['funcParams'][0]['cmdVal'] = lineContents[5]
             if len(lineContents) > 6:
