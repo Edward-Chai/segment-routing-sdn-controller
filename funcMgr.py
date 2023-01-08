@@ -86,7 +86,7 @@ class funcHandling(object):
                 r = requests.post(url, data=s, timeout=5)
                 keep = False
             except Exception as e:
-                LOG.info(time.asctime(time.localtime(time.time())), ", Request failed!\n")
+                LOG.info("Request failed!\n")
         # r = requests.post(url, data=s, timeout=5)
         return r
 
