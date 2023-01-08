@@ -47,37 +47,38 @@ HEADERS = {
     'Access-Control-Allow-Methods': 'GET, POST',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
+class FUNC_MGR_Controller(ControllerBase):
 
-class funcHandling(object):
+    def __init__(self, req, link, data, **config):
+        super(FUNC_MGR_Controller, self).__init__(req, link, data, **config)
 
-    def __init__(self):
-        super(funcHandling, self).__init__()
-
-
-
-
-    def insert_single_flow(self, req, **kwargs):
+    def get_dc_scope_info(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
         # req_body_dec = req_body.decode('utf-8')
-        SRv6_match = SRv6_field_match()
-        iproute2u = iproute2_utils()
-        match_fields = SRv6_match.parse_match_fields(req_body)
-        LOG.info("--------------- Match Fields Start ---------------")
-        for key in match_fields:
-            LOG.info("%s:   %s", key, match_fields[key])
-        LOG.info("--------------- Match Fields End -----------------")
+        # SRv6_match = SRv6_field_match()
+        # iproute2u = iproute2_utils()
+        # match_fields = SRv6_match.parse_match_fields(req_body)
+        # LOG.info("--------------- Match Fields Start ---------------")
+        # for key in match_fields:
+        #     LOG.info("%s:   %s", key, match_fields[key])
+        # LOG.info("--------------- Match Fields End -----------------")
         # ssh = paramiko.SSHClient()
         # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # ssh.connect(hostname='131.113.71.192', port=22, username='root', password='Zhaizehua960929')
         # stdin, stdout, stderr = ssh.exec_command('ps -ef | grep test')
         # print(stdout.read().decode())
         # ssh.close()
-        iproute2u.insert_srv6_rule_local(match_fields)
-        # r = requests.post()
+        # iproute2u.insert_srv6_rule_local(match_fields)
+
         # print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
+
+class funcHandling(object):
+
+    def __init__(self):
+        super(funcHandling, self).__init__()
 
     def sendFuncInfo(self, url, postMsg):
         s = json.dumps(postMsg)
@@ -130,11 +131,11 @@ class funcMgr(app_manager.RyuApp):
         # mapper.connect('sr_rules', uri,
         #                controller=SR_API_Controller, action='insert_single_flow',
         #                conditions=dict(method=['POST']))
-        # monitor_path = '/monitor'
-        # uri = monitor_path + 'dcScope'
-        # mapper.connect('sr_rules', uri,
-        #                controller=SR_API_Controller, action='insert_single_flow',
-        #                conditions=dict(method=['POST']))
+        monitor_path = '/monitor'
+        uri = monitor_path + 'dcScope'
+        mapper.connect('monitor', uri,
+                       controller=FUNC_MGR_Controller, action='get_dc_scope_info',
+                       conditions=dict(method=['POST']))
 
 '''
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
