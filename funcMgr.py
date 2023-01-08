@@ -97,6 +97,7 @@ class funcMgr(app_manager.RyuApp):
         funcInfo = f.readlines()
         f = open("monitorURL", "r")
         monitorURL = f.readline()
+        monitorURL = monitorURL.strip()
         dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
         funcHandlingUtil = funcHandling()
         reqResult = funcHandlingUtil.sendFuncInfo(monitorURL, dcFuncInfoDict)
