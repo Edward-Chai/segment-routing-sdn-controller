@@ -132,7 +132,7 @@ class funcMgr(app_manager.RyuApp):
         #                controller=SR_API_Controller, action='insert_single_flow',
         #                conditions=dict(method=['POST']))
         monitor_path = '/monitor'
-        uri = monitor_path + 'dcScope'
+        uri = monitor_path + '/dcScope'
         mapper.connect('monitor', uri,
                        controller=FUNC_MGR_Controller, action='get_dc_scope_info',
                        conditions=dict(method=['POST']))
