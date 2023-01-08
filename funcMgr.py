@@ -12,6 +12,8 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from datetime import *
+
 import requests
 # !/usr/bin/python
 
@@ -78,7 +80,14 @@ class funcHandling(object):
 
     def sendFuncInfo(self, url, postMsg):
         s = json.dumps(postMsg)
-        r = requests.post(url, data=s, timeout=5)
+        keep = True
+        while keep:
+            try:
+                r = requests.post(url, data=s, timeout=5)
+                keep = False
+            except Exception as e:
+                LOG.info(datetime.now(), ", Request failed!\n")
+        # r = requests.post(url, data=s, timeout=5)
         return r
 
 
