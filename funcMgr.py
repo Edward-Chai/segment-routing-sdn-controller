@@ -54,7 +54,7 @@ class FUNC_MGR_Controller(ControllerBase):
 
     def get_dc_scope_info(self, req, **kwargs):
         req_body = req.body
-        LOG.debug(req_body)
+        LOG.info(req_body)
         # req_body_dec = req_body.decode('utf-8')
         # SRv6_match = SRv6_field_match()
         # iproute2u = iproute2_utils()
