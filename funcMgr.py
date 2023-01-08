@@ -84,7 +84,7 @@ class funcHandling(object):
         keep = True
         while keep:
             try:
-                r = requests.post(url, data=s, timeout=5)
+                r = requests.post(url, data=s, timeout=10)
                 keep = False
             except Exception as e:
                 print(datetime.datetime.now(), " Request failed!")
