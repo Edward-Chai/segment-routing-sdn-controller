@@ -74,7 +74,7 @@ class funcHandling(object):
         # print(stdout.read().decode())
         # ssh.close()
         iproute2u.insert_srv6_rule_local(match_fields)
-        r = requests.post()
+        # r = requests.post()
         # print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
@@ -87,7 +87,7 @@ class funcHandling(object):
                 r = requests.post(url, data=s, timeout=5)
                 keep = False
             except Exception as e:
-                LOG.info(datetime.datetime.now(), " Request failed!")
+                print(datetime.datetime.now(), " Request failed!")
         # r = requests.post(url, data=s, timeout=5)
         return r
 
