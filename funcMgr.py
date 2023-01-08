@@ -12,7 +12,7 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import requests
 # !/usr/bin/python
 
 from ryu.base import app_manager
@@ -45,10 +45,10 @@ HEADERS = {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 
-class funcHandling(ControllerBase):
+class funcHandling(object):
 
-    def __init__(self, req, link, data, **config):
-        super(funcHandling, self).__init__(req, link, data, **config)
+    def __init__(self):
+        super(funcHandling, self).__init__()
 
 
 
@@ -71,10 +71,15 @@ class funcHandling(ControllerBase):
         # print(stdout.read().decode())
         # ssh.close()
         iproute2u.insert_srv6_rule_local(match_fields)
-
+        r = requests.post()
         # print("req_body:", req_body)
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
+
+    def sendFuncInfo(self, url, postMsg):
+        s = json.dumps(postMsg)
+        r = requests.post(url, data=s)
+        return r
 
 
 class funcMgr(app_manager.RyuApp):
@@ -91,7 +96,10 @@ class funcMgr(app_manager.RyuApp):
         infoConversion = info_conversion()
         funcInfo = f.readlines()
         dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
+        funcHandlingUtil = funcHandling()
+        # reqResult = funcHandlingUtil.sendFuncInfo(url, dcFuncInfoDict)
         LOG.info(dcFuncInfoDict)
+        LOG.info("args: ", args, "\nkwargs: ", kwargs, "\n")
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
