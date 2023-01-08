@@ -78,7 +78,7 @@ class funcHandling(object):
 
     def sendFuncInfo(self, url, postMsg):
         s = json.dumps(postMsg)
-        r = requests.post(url, data=s)
+        r = requests.post(url, data=s, timeout=5)
         return r
 
 
