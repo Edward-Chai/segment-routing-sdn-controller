@@ -101,7 +101,7 @@ class funcMgr(app_manager.RyuApp):
         super(funcMgr, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
 
-        os.chdir("/root/funcInfo/")
+        os.chdir("/home/edward/funcInfo/")
         f = open("funcInfoList", "r")
         infoConversion = info_conversion()
         funcInfo = f.readlines()
