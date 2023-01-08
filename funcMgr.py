@@ -12,7 +12,8 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import time
+
+import datetime
 
 import requests
 # !/usr/bin/python
@@ -86,7 +87,7 @@ class funcHandling(object):
                 r = requests.post(url, data=s, timeout=5)
                 keep = False
             except Exception as e:
-                LOG.info("Request failed!\n")
+                LOG.info(datetime.datetime.now(), " Request failed!")
         # r = requests.post(url, data=s, timeout=5)
         return r
 
