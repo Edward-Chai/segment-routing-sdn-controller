@@ -95,11 +95,14 @@ class funcMgr(app_manager.RyuApp):
         f = open("funcInfoList", "r")
         infoConversion = info_conversion()
         funcInfo = f.readlines()
+        f = open("monitorURL", "r")
+        monitorURL = f.readline()
         dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
         funcHandlingUtil = funcHandling()
-        # reqResult = funcHandlingUtil.sendFuncInfo(url, dcFuncInfoDict)
-        LOG.info(dcFuncInfoDict)
-        LOG.info("args: ", args, "\nkwargs: ", kwargs, "\n")
+        reqResult = funcHandlingUtil.sendFuncInfo(monitorURL, dcFuncInfoDict)
+        LOG.info(dcFuncInfoDict, "\n")
+        # LOG.info("args: ", args, "\nkwargs: ", kwargs, "\n")
+        LOG.info("reqResult: ", reqResult)
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
