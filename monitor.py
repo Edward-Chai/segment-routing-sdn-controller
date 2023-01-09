@@ -80,7 +80,7 @@ class Monitor(ControllerBase):
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
-        LOG.info("msg_dec: ", msg_dec)
+        # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
