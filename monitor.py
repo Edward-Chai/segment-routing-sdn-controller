@@ -31,8 +31,12 @@ from parameters import *
 from TE.te_controller import *
 import logging
 import paramiko
+import datetime
 from info_conversion import info_conversion
 from iproute2_utils import iproute2_utils
+import requests
+import os
+import uuid
 
 LOG = logging.getLogger('ryu.app.monitor')
 LOG.setLevel(logging.INFO)
@@ -42,6 +46,7 @@ HEADERS = {
     'Access-Control-Allow-Methods': 'GET, POST',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
+region_id = ""
 
 class Monitor(ControllerBase):
 
@@ -74,6 +79,29 @@ class Monitor(ControllerBase):
     def dc_scope_to_intra(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        LOG.info("msg_dec: ", msg_dec)
+        jsonMsg = json.loads(msg_dec)
+        infoConversion =info_conversion()
+        intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
+        print("intraFuncInfo: ", intraFuncInfo)
+
+class reqHandling(object):
+
+    def __init__(self):
+        super(reqHandling, self).__init__()
+
+    def sendFuncInfo(self, url, postMsg):
+        s = json.dumps(postMsg)
+        # keep = True
+        # while keep:
+        try:
+            r = requests.post(url, data=s, timeout=5)
+            keep = False
+        except Exception as e:
+            print(datetime.datetime.now(), " Request failed!")
+        # r = requests.post(url, data=s, timeout=5)
+        return r
 
 
 class InitMonitor(app_manager.RyuApp):
@@ -84,16 +112,28 @@ class InitMonitor(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(InitMonitor, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
-
         mapper = wsgi.mapper
+        # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
+        if os.path.exists("region_id"):
+            f = open("region_id", "r")
+            region_id = f.readline()
+            f.close()
+        else:
+            f = open("region_id", "w")
+            region_id = str(uuid.uuid4())
+            f.write(region_id)
+            f.close()
+
+
+
         monitor_path = '/monitor'
-        uri = monitor_path + 'dcScope'
+        uri = monitor_path + '/intra'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='dc_scope_to_intra',
                        conditions=dict(method=['POST']))
-        uri = monitor_path + 'intra'
+        uri = monitor_path + '/inter'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='intra_scope_to_inter',
                        conditions=dict(method=['POST']))

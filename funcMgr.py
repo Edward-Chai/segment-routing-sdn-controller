@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import datetime
-
+import uuid
 import requests
 # !/usr/bin/python
 
@@ -52,13 +52,14 @@ class FUNC_MGR_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(FUNC_MGR_Controller, self).__init__(req, link, data, **config)
 
-    def get_dc_scope_info(self, req, **kwargs):
+    def dc_scope_to_intra(self, req, **kwargs):
         req_body = req.body
         LOG.info("req_body: ", req_body)
         msg_dec = req_body.decode()
         LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         print(jsonMsg, "\n")
+        funcHandlingUtil = funcHandling()
         # req_body_dec = req_body.decode('utf-8')
         # SRv6_match = SRv6_field_match()
         # iproute2u = iproute2_utils()
@@ -86,13 +87,13 @@ class funcHandling(object):
 
     def sendFuncInfo(self, url, postMsg):
         s = json.dumps(postMsg)
-        keep = True
-        while keep:
-            try:
-                r = requests.post(url, data=s, timeout=10)
-                keep = False
-            except Exception as e:
-                print(datetime.datetime.now(), " Request failed!")
+        # keep = True
+        # while keep:
+        try:
+            r = requests.post(url, data=s, timeout=5)
+            keep = False
+        except Exception as e:
+            print(datetime.datetime.now(), " Request failed!")
         # r = requests.post(url, data=s, timeout=5)
         return r
 
@@ -108,6 +109,7 @@ class funcMgr(app_manager.RyuApp):
 
         os.chdir("/home/edward/funcInfo/")
         f = open("funcInfoList", "r")
+        region_id = ""
         infoConversion = info_conversion()
         funcInfo = f.readlines()
         f.close()
@@ -121,6 +123,17 @@ class funcMgr(app_manager.RyuApp):
         f = open("dcFuncList", "w")
         f.write(jsonMsg)
         f.close()
+        if os.path.exists("region_id"):
+            f = open("region_id", "r")
+            region_id = f.readline()
+            f.close()
+        else:
+            f = open("region_id", "w")
+            region_id = str(uuid.uuid4())
+            f.write(region_id)
+            f.close()
+
+
         # reqResult = funcHandlingUtil.sendFuncInfo(monitorURL, dcFuncInfoDict)
         # LOG.info(dcFuncInfoDict, "\n")
         # LOG.info("args: ", args, "\nkwargs: ", kwargs, "\n")
@@ -138,7 +151,7 @@ class funcMgr(app_manager.RyuApp):
         monitor_path = '/monitor'
         uri = monitor_path + '/dcScope'
         mapper.connect('monitor', uri,
-                       controller=FUNC_MGR_Controller, action='get_dc_scope_info',
+                       controller=FUNC_MGR_Controller, action='dc_scope_to_intra',
                        conditions=dict(method=['POST']))
 
 '''

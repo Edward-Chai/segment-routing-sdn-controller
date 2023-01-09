@@ -59,34 +59,19 @@ dc_Scope_Resource_Info = {  # all supported match fields. eg, curl -d "match="in
     # all supported match fields. eg, curl -d "match="in_port=1,out_port=2,nw_src=::01""
 regional_Scope_Resource_Info = {
         "regionId": None,
-        "dcId": None,
         "interRegionLink": [{
-            "srcAddr": None,
-            "dstAddr": None,
-            "linkType": None,
-            "inbound": None,
-            "inboundUsage": None,
-            "outbound": None,
-            "outboundUsage": None
+            "linkId": None,
+            "inbound": 0,
+            "inboundUsage": float(0),
+            "outbound": 0,
+            "outboundUsage": float(0)
         }],
-        "regionalCPUClockRate": None,
-        "regionalCPUUsage": None,
-        "regionalGPUExistence": None,
-        "regionalMemory": None,
-        "regionalMemoryUsage": None,
-        "dcFuncList": {
-            "funcId": None,
-            "funcParams": [{
-                "cmdKey": None,
-                "cmdVal": None
-            }],
-            "orientation": None,
-            "customMapping": [{
-                "videoQual": None,
-                "subLang": None,
-                "audioLang": None
-            }]
-        }
+        "regionalCPUClockRate": 0,
+        "regionalCPUUsage": float(0),
+        "regionalGPUExistence": 0,
+        "regionalMemory": 0,
+        "regionalMemoryUsage": float(0),
+        "dcFuncList": []
     }
 
 global_Scope_Resource_Info = {
@@ -331,6 +316,8 @@ result_of_regional_function_deployment = {
         }]
     }
 
+dcIdList = []
+
 class info_conversion(object):
 
 
@@ -347,6 +334,7 @@ class info_conversion(object):
 
     # def get_match_fields(self):
     #     return self.match_fields
+
 
     def parse_match_fields(self, str_enc):
         LOG.debug("Match.parse_match_field, str=%s" % str_enc)
@@ -397,9 +385,24 @@ class info_conversion(object):
                     dict['dcFuncList'][lineIdx]['funcParams'][idx-5]['cmdVal'] = tmpLine[1].strip('"\n')
         return dict
 
-    def DCScopeToIntra(self, str_enc):
-        str_dec = str_enc.decode()
-        tokens = str_dec.split(',')
+    def DCScopeToIntra(self, jsonMsg, region_id):
+        regional_Scope_Resource_Info['regionId'] = region_id
+        if jsonMsg['dcid'] not in dcIdList:
+            dcIdList.append(jsonMsg['dcid'])
+            for dcMachineIdx in range(len(jsonMsg['dc_machine_info'])):
+                # if dcMachineIdx > 0:
+                regional_Scope_Resource_Info['regionalGPUExistence'] = int(jsonMsg['dc_machine_info'][dcMachineIdx]['gpu_existence'])
+                regional_Scope_Resource_Info["regionalCPUUsage"] = regional_Scope_Resource_Info['regionalCPUClockRate'] * regional_Scope_Resource_Info["regionalCPUUsage"] + jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate'] * jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_usage'] / jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate'] + regional_Scope_Resource_Info['regionalCPUClockRate']
+                regional_Scope_Resource_Info['regionalCPUClockRate'] += int(jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate'])
+                regional_Scope_Resource_Info["regionalMemoryUsage"] = regional_Scope_Resource_Info["regionalMemoryUsage"] + jsonMsg['dc_machine_info'][dcMachineIdx]['free_ram']
+                regional_Scope_Resource_Info['regionalMemory'] += int(jsonMsg['dc_machine_info'][dcMachineIdx]['total_ram'])
+            for Idx in range(len(jsonMsg['dcFuncList'])):
+                # regional_Scope_Resource_Info['dcFuncList'] = []
+                regional_Scope_Resource_Info['dcFuncList'].append(jsonMsg['dcFuncList'][Idx])
+                regional_Scope_Resource_Info['dcFuncList'][Idx].update({"dcId": jsonMsg['dcid']})
+        return regional_Scope_Resource_Info
+
+
 
     def __init__(self, **kwagrs):
         super(info_conversion, self).__init__()
