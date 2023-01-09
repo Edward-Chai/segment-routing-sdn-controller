@@ -116,9 +116,9 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
+        global region_id
         if os.path.exists("region_id"):
             f = open("region_id", "r")
-            global region_id
             region_id = f.readline()
             f.close()
         else:
