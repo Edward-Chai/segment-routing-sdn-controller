@@ -54,7 +54,8 @@ class FUNC_MGR_Controller(ControllerBase):
 
     def dc_scope_to_intra(self, req, **kwargs):
         req_body = req.body
-        LOG.info("req_body: ", req_body)
+
+        # LOG.info("req_body: ", req_body)
         msg_dec = req_body.decode()
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)

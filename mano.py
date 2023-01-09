@@ -47,13 +47,11 @@ HEADERS = {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 region_id = ""
-interRegionResourceInfoList = []
-interRegionResourceInfoRegionIdList = []
-
-class Monitor(ControllerBase):
+resourceInfo = None
+class MANO(ControllerBase):
 
     def __init__(self, req, link, data, **config):
-        super(Monitor, self).__init__(req, link, data, **config)
+        super(MANO, self).__init__(req, link, data, **config)
 
 
     def insert_single_flow(self, req, **kwargs):
@@ -79,39 +77,23 @@ class Monitor(ControllerBase):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
-    def dc_scope_to_intra(self, req, **kwargs):
+    def req_of_regional_resource_info(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
-        print("req.host: ", req.host)
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
         reqHandler = reqHandling()
-        intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
-        # print("intraFuncInfo: ", intraFuncInfo)
-        # reqHandler.sendFuncInfo("http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter", intraFuncInfo)
+        intraFuncInfo = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
+        print("intraFuncInfo: ", intraFuncInfo)
+        mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
+        r = reqHandler.sendFuncInfo(mano_url, intraFuncInfo)
+        global resourceInfo
+        resourceInfo = json.loads(r.text)
 
+    def inter_region_path_comput(self):
 
-    def intra_scope_to_inter(self, req, **kwargs):
-        global interRegionResourceInfoList, interRegionResourceInfoRegionIdList
-        req_body = req.body
-        LOG.debug(req_body)
-        msg_dec = req_body.decode()
-        # LOG.info("msg_dec: ", msg_dec)
-        jsonMsg = json.loads(msg_dec)
-        if jsonMsg["regionId"] in interRegionResourceInfoRegionIdList:
-            for Idx in range(len(interRegionResourceInfoList)):
-                if interRegionResourceInfoList[Idx]["regionId"] == jsonMsg["regionId"]:
-                    interRegionResourceInfoList.pop(Idx)
-        else:
-            interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
-            interRegionResourceInfoList.append(jsonMsg)
-
-        # infoConversion = info_conversion()
-        # reqHandler = reqHandling()
-        # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
-        print("interFuncInfo: ", jsonMsg)
 
 class reqHandling(object):
 
@@ -143,28 +125,28 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        global region_id
-        if os.path.exists("region_id"):
-            f = open("region_id", "r")
-            region_id = f.readline()
-            f.close()
-        else:
-            f = open("region_id", "w")
-            region_id = str(uuid.uuid4())
-            f.write(region_id)
-            f.close()
+        # global region_id
+        # if os.path.exists("region_id"):
+        #     f = open("region_id", "r")
+        #     region_id = f.readline()
+        #     f.close()
+        # else:
+        #     f = open("region_id", "w")
+        #     region_id = str(uuid.uuid4())
+        #     f.write(region_id)
+        #     f.close()
 
 
 
-        monitor_path = '/monitor'
-        uri = monitor_path + '/intra'
-        mapper.connect('monitor', uri,
-                       controller=Monitor, action='dc_scope_to_intra',
+        user_req_path = '/usrReq'
+        # uri = monitor_path + '/intra'
+        mapper.connect('usrReq', user_req_path,
+                       controller=MANO, action='req_of_regional_resource_info',
                        conditions=dict(method=['POST']))
-        uri = monitor_path + '/inter'
-        mapper.connect('monitor', uri,
-                       controller=Monitor, action='intra_scope_to_inter',
-                       conditions=dict(method=['POST']))
+        # uri = monitor_path + '/inter'
+        # mapper.connect('monitor', uri,
+        #                controller=requestMgr, action='intra_scope_to_inter',
+        #                conditions=dict(method=['POST']))
 
 '''
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
