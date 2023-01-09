@@ -89,7 +89,7 @@ class Monitor(ControllerBase):
         reqHandler.sendFuncInfo("http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter", intraFuncInfo)
 
 
-    def intra_to_inter(self, req, **kwargs):
+    def intra_scope_to_inter(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
