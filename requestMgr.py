@@ -52,6 +52,7 @@ class requestMgr(ControllerBase):
 
     def __init__(self, req, link, data, **config):
         super(requestMgr, self).__init__(req, link, data, **config)
+        print(req, link, data, config)
 
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
@@ -76,7 +77,7 @@ class requestMgr(ControllerBase):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
-    def dc_scope_to_intra(self, req, **kwargs):
+    def req_send_to_mano(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
@@ -87,6 +88,7 @@ class requestMgr(ControllerBase):
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         print("intraFuncInfo: ", intraFuncInfo)
         reqHandler.sendFuncInfo("http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter", intraFuncInfo)
+
 
 
 class reqHandling(object):
@@ -132,15 +134,15 @@ class InitMonitor(app_manager.RyuApp):
 
 
 
-        monitor_path = '/monitor'
-        uri = monitor_path + '/intra'
-        mapper.connect('monitor', uri,
-                       controller=Monitor, action='dc_scope_to_intra',
+        user_req_path = '/usrReq'
+        # uri = monitor_path + '/intra'
+        mapper.connect('usrReq', user_req_path,
+                       controller=requestMgr, action='req_send_to_mano',
                        conditions=dict(method=['POST']))
-        uri = monitor_path + '/inter'
-        mapper.connect('monitor', uri,
-                       controller=Monitor, action='intra_scope_to_inter',
-                       conditions=dict(method=['POST']))
+        # uri = monitor_path + '/inter'
+        # mapper.connect('monitor', uri,
+        #                controller=requestMgr, action='intra_scope_to_inter',
+        #                conditions=dict(method=['POST']))
 
 '''
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
