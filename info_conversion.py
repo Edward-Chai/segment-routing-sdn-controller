@@ -86,7 +86,6 @@ usr_Req = {  # all supported match fields. eg, curl -d "match="in_port=1,out_por
         "usrId": None,
         "ContentId": None,
         "AuthToken": None,
-        "TokenLen": None,
         "Customization": [{
             "VideoQual": None,
             "Sublang": None,
@@ -316,6 +315,16 @@ result_of_regional_function_deployment = {
         }]
     }
 
+request_of_inter_region_path_comput = {
+    "contentId": "",
+    "Customization": {
+        "VideoQual": "",
+        "SubLang": "",
+        "AudioLang": ""
+    },
+    "locality": ""
+}
+
 dcIdList = []
 
 class info_conversion(object):
@@ -402,7 +411,11 @@ class info_conversion(object):
                 regional_Scope_Resource_Info['dcFuncList'][Idx].update({"dcId": jsonMsg['dcid']})
         return regional_Scope_Resource_Info
 
-
+    def usr_req_to_req_of_inter_region_path_comput(self, jsonMsg):
+        request_of_inter_region_path_comput["contentId"] = jsonMsg["contentId"]
+        request_of_inter_region_path_comput["Customization"] = jsonMsg["Customization"]
+        request_of_inter_region_path_comput["locality"] = "0001"
+        return request_of_inter_region_path_comput
 
     def __init__(self, **kwagrs):
         super(info_conversion, self).__init__()
