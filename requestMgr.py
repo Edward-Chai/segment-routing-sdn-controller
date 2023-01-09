@@ -83,10 +83,11 @@ class requestMgr(ControllerBase):
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
+        reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         print("intraFuncInfo: ", intraFuncInfo)
-        return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
-                        charset='utf8', headers=HEADERS)
+        reqHandler.sendFuncInfo("http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter", intraFuncInfo)
+
 
 class reqHandling(object):
 
