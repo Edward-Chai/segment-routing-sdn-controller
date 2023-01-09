@@ -70,7 +70,7 @@ regional_Scope_Resource_Info = {
         "regionalCPUUsage": float(0),
         "regionalGPUExistence": 0,
         "regionalMemory": 0,
-        "regionalMemoryUsage": float(0),
+        "regionalMemoryUsage": 0,
         "dcFuncList": []
     }
 
