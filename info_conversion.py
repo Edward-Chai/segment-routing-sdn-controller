@@ -394,7 +394,7 @@ class info_conversion(object):
                 regional_Scope_Resource_Info['regionalGPUExistence'] = int(jsonMsg['dc_machine_info'][dcMachineIdx]['gpu_existence'])
                 regional_Scope_Resource_Info["regionalCPUUsage"] = regional_Scope_Resource_Info['regionalCPUClockRate'] * regional_Scope_Resource_Info["regionalCPUUsage"] + int(jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate']) * float(jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_usage']) / int(jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate']) + regional_Scope_Resource_Info['regionalCPUClockRate']
                 regional_Scope_Resource_Info['regionalCPUClockRate'] += int(jsonMsg['dc_machine_info'][dcMachineIdx]['cpu_clock_rate'])
-                regional_Scope_Resource_Info["regionalMemoryUsage"] = regional_Scope_Resource_Info["regionalMemoryUsage"] + jsonMsg['dc_machine_info'][dcMachineIdx]['free_ram']
+                regional_Scope_Resource_Info["regionalMemoryUsage"] = regional_Scope_Resource_Info["regionalMemoryUsage"] + int(jsonMsg['dc_machine_info'][dcMachineIdx]['free_ram'])
                 regional_Scope_Resource_Info['regionalMemory'] += int(jsonMsg['dc_machine_info'][dcMachineIdx]['total_ram'])
             for Idx in range(len(jsonMsg['dcFuncList'])):
                 # regional_Scope_Resource_Info['dcFuncList'] = []
