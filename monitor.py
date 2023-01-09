@@ -52,6 +52,7 @@ class Monitor(ControllerBase):
 
     def __init__(self, req, link, data, **config):
         super(Monitor, self).__init__(req, link, data, **config)
+        print(req, link, data, config)
 
     def insert_single_flow(self, req, **kwargs):
         req_body = req.body
