@@ -118,10 +118,12 @@ class InitMonitor(app_manager.RyuApp):
 
         if os.path.exists("region_id"):
             f = open("region_id", "r")
+            global region_id
             region_id = f.readline()
             f.close()
         else:
             f = open("region_id", "w")
+            global region_id
             region_id = str(uuid.uuid4())
             f.write(region_id)
             f.close()
