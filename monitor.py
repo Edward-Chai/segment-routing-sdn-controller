@@ -83,7 +83,7 @@ class Monitor(ControllerBase):
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
-        print("req.host: ", req.host)
+        print("req.client_addr: ", req.client_addr)
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
