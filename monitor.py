@@ -123,7 +123,6 @@ class InitMonitor(app_manager.RyuApp):
             f.close()
         else:
             f = open("region_id", "w")
-            global region_id
             region_id = str(uuid.uuid4())
             f.write(region_id)
             f.close()
