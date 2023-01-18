@@ -95,7 +95,7 @@ class Monitor(ControllerBase):
         reqHandler.sendFuncInfo(PrimaryInter, intraFuncInfo)
 
 
-    def req_for_list(self, req, **kwargs):
+    def req_for_intra(self, req, **kwargs):
         global interRegionResourceInfoList
         req_body = req.body
         LOG.debug(req_body)
@@ -196,10 +196,7 @@ class InitMonitor(app_manager.RyuApp):
                 config.pop(1)
                 config.pop(0)
             else:
-                config.pop(1)
                 config.pop(0)
-
-
 
 
         monitor_path = '/monitor'
@@ -207,9 +204,13 @@ class InitMonitor(app_manager.RyuApp):
         mapper.connect('monitor', uri,
                        controller=Monitor, action='dc_scope_to_intra',
                        conditions=dict(method=['POST']))
-        uri = monitor_path + '/req'
+        uri = monitor_path + '/req_intra'
         mapper.connect('monitor', uri,
-                       controller=Monitor, action='dc_scope_to_intra',
+                       controller=Monitor, action='req_for_intra',
+                       conditions=dict(method=['GET,POST']))
+        uri = monitor_path + '/req_inter'
+        mapper.connect('monitor', uri,
+                       controller=Monitor, action='req_for_inter',
                        conditions=dict(method=['GET,POST']))
         uri = monitor_path + '/inter'
         mapper.connect('monitor', uri,
