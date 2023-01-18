@@ -90,10 +90,10 @@ class requestMgr(ControllerBase):
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
         reqHandler = reqHandling()
-        intraFuncInfo = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
-        print("intraFuncInfo: ", intraFuncInfo)
+        interRegionPathComput = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
+        print("interRegionPathComput: ", interRegionPathComput)
         mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
-        reqHandler.sendFuncInfo(mano_url, intraFuncInfo)
+        # reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
 
     def req_of_global_func_deployment(self, req):
         req_body = req.body
