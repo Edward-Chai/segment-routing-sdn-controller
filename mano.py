@@ -95,7 +95,7 @@ class MANO(ControllerBase):
         print("intraFuncInfo: ", intraFuncInfo)
         # mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
         monitor_url = MonitorURL + 'monitor/req_inter'
-        r = reqHandler.sendGet(MonitorURL)
+        r = reqHandler.sendGet(monitor_url)
         resourceInfo = json.loads(r.text)
         # global resourceInfo
         print("resourceInfo: ", resourceInfo, "\n")
@@ -119,6 +119,7 @@ class reqHandling(object):
         s = json.dumps(postMsg)
         # keep = True
         # while keep:
+        r = ""
         try:
             r = requests.post(url, data=s, timeout=5)
             keep = False
