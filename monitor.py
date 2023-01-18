@@ -49,8 +49,8 @@ HEADERS = {
 region_id = ""
 interRegionResourceInfoList = []
 interRegionResourceInfoRegionIdList = []
-CDInter = ""
-PrimaryInter = ""
+CDInterRegionURL = ""
+PrimaryInterURL = ""
 
 class Monitor(ControllerBase):
 
@@ -92,7 +92,7 @@ class Monitor(ControllerBase):
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         # print("intraFuncInfo: ", intraFuncInfo)
-        reqHandler.sendFuncInfo(PrimaryInter, intraFuncInfo)
+        reqHandler.sendFuncInfo(PrimaryInterURL, intraFuncInfo)
 
 
     def req_for_intra(self, req, **kwargs):
@@ -142,6 +142,7 @@ class reqHandling(object):
         s = json.dumps(postMsg)
         # keep = True
         # while keep:
+        r = ""
         try:
             r = requests.post(url, data=s, timeout=5)
             keep = False
@@ -163,7 +164,7 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        global region_id, CDInter, PrimaryInter
+        global region_id, CDInterRegionURL, PrimaryInterURL
         if os.path.exists("region_id"):
             f = open("region_id", "r")
             region_id = f.readline()
@@ -187,12 +188,12 @@ class InitMonitor(app_manager.RyuApp):
             case1 = config[0].split()
             if case1[0] == "Inter" and case1[1] == "Primary":
                 case2 = config[1].split()
-                CDInter = case2[1]
+                CDInterRegionURL = case2[1]
                 config.pop(1)
                 config.pop(0)
             elif case1[0] == "Intra":
                 case2 = config[1].split()
-                PrimaryInter = case2[1]
+                PrimaryInterURL = case2[1]
                 config.pop(1)
                 config.pop(0)
             else:
