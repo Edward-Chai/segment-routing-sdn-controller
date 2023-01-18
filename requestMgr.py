@@ -50,6 +50,10 @@ region_id = ""
 usr_ip_task_dict = {}
 usr_ip_task_dict_Idx = 0
 
+CDInterFuncURL = ""
+CDInterMonitorURL = ""
+CDInterMANOURL = ""
+
 class requestMgr(ControllerBase):
 
     def __init__(self, req, link, data, **config):
@@ -92,8 +96,8 @@ class requestMgr(ControllerBase):
         reqHandler = reqHandling()
         interRegionPathComput = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
         print("interRegionPathComput: ", interRegionPathComput)
-        mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
-        # reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
+        mano_url = CDInterMANOURL + "/req/interRegionPathComput"
+        reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
 
     def req_of_global_func_deployment(self, req):
         req_body = req.body
@@ -128,16 +132,25 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        # global region_id
-        # if os.path.exists("region_id"):
-        #     f = open("region_id", "r")
-        #     region_id = f.readline()
-        #     f.close()
-        # else:
-        #     f = open("region_id", "w")
-        #     region_id = str(uuid.uuid4())
-        #     f.write(region_id)
-        #     f.close()
+        global CDInterMonitorURL,CDInterFuncURL,CDInterMANOURL
+        reqMgrConfig = ""
+        if os.path.exists("config"):
+            f = open("config", "r")
+            reqMgrConfig = f.readlines()
+            f.close()
+        else:
+            print("Cannot open config file for Request Manager !\n")
+            exit()
+
+        while len(reqMgrConfig) != 0:
+            case = reqMgrConfig[0].split()
+            if case[0] == "Func":
+                CDInterFuncURL = case[1]
+            if case[0] == "Monitor":
+                CDInterMonitorURL = case[1]
+            if case[0] == "MANO":
+                CDInterMANOURL = case[1]
+            reqMgrConfig.pop(0)
 
 
 

@@ -48,6 +48,9 @@ HEADERS = {
 
 region_id = ""
 resourceInfo = None
+
+reqMgrURL = ""
+
 class MANO(ControllerBase):
 
     def __init__(self, req, link, data, **config):
@@ -92,8 +95,13 @@ class MANO(ControllerBase):
         global resourceInfo
         resourceInfo = json.loads(r.text)
 
-    # def inter_region_path_comput(self):
-
+    def inter_region_path_comput(self, req):
+        global reqMgrURL
+        reqMgrURL = req.client_addr
+        req_body = req.body
+        LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        print("req_body: ", req_body , "\n")
 
 
 class reqHandling(object):
@@ -139,10 +147,14 @@ class InitMonitor(app_manager.RyuApp):
 
 
 
-        user_req_path = '/usrReq'
-        # uri = monitor_path + '/intra'
-        mapper.connect('usrReq', user_req_path,
+        mano_req_path = '/req'
+        uri = mano_req_path + '/intra'
+        mapper.connect('req', uri,
                        controller=MANO, action='req_of_regional_resource_info',
+                       conditions=dict(method=['POST']))
+        uri = mano_req_path + '/interRegionPathComput'
+        mapper.connect('req', uri,
+                       controller=MANO, action='inter_region_path_comput',
                        conditions=dict(method=['POST']))
         # uri = monitor_path + '/inter'
         # mapper.connect('monitor', uri,
