@@ -399,7 +399,7 @@ class info_conversion(object):
             for Idx in range(len(jsonMsg['dcFuncList'])):
                 # regional_Scope_Resource_Info['dcFuncList'] = []
                 regional_Scope_Resource_Info['dcFuncList'].append(jsonMsg['dcFuncList'][Idx])
-                regional_Scope_Resource_Info['dcFuncList'][Idx+1].update({"dcId": jsonMsg['dcid']})
+                regional_Scope_Resource_Info['dcFuncList'][-1].update({"dcId": jsonMsg['dcid']})
         return regional_Scope_Resource_Info
 
     def usr_req_to_req_of_inter_region_path_comput(self, jsonMsg):
