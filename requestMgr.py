@@ -173,6 +173,13 @@ class InitMonitor(app_manager.RyuApp):
         mapper.connect('usr', uri,
                        controller=requestMgr, action='req_send_to_mano',
                        conditions=dict(method=['POST']))
+
+        user_req_path = '/func'
+        uri = user_req_path + '/globalFuncDeploy'
+        mapper.connect('func', uri,
+                       controller=requestMgr, action='req_of_global_func_deploy',
+                       conditions=dict(method=['POST']))
+
         # uri = monitor_path + '/inter'
         # mapper.connect('monitor', uri,
         #                controller=requestMgr, action='intra_scope_to_inter',

@@ -83,7 +83,7 @@ class MANO(ControllerBase):
 
     def inter_region_path_comput(self, req, **kwargs):
         global reqMgrURL
-        reqMgrURL = 'http://[' + req.client_addr + ']:2000/'
+        reqMgrURL = 'http://[' + req.client_addr + ']:2000/func/globalFuncDeploy'
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
@@ -100,6 +100,7 @@ class MANO(ControllerBase):
         # global resourceInfo
         print("resourceInfo: ", resourceInfo, "\n")
         resultOfInterPathComput = infoConversion.result_of_inter_region_path_comput(resourceInfo)
+        r = reqHandler.sendPost(reqMgrURL, resultOfInterPathComput)
 
 
 
