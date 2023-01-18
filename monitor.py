@@ -126,8 +126,8 @@ class Monitor(ControllerBase):
         infoConversion = info_conversion()
         reqHandler = reqHandling()
         # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
-        CDInterRegionURL = CDInterRegionURL + 'monitor/cd'
-        reqHandler.sendFuncInfo(CDInterRegionURL, jsonMsg)
+        CD_Inter_Region_URL = CDInterRegionURL + 'monitor/cd'
+        reqHandler.sendFuncInfo(CD_Inter_Region_URL, jsonMsg)
         # print("interFuncInfo: ", jsonMsg)
 
     def region_to_cd_resource_info(self , req):
