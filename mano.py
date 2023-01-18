@@ -50,6 +50,7 @@ region_id = ""
 resourceInfo = None
 
 reqMgrURL = ""
+MonitorURL = ""
 
 class MANO(ControllerBase):
 
@@ -81,6 +82,8 @@ class MANO(ControllerBase):
                         charset='utf8', headers=HEADERS)
 
     def req_of_regional_resource_info(self, req, **kwargs):
+        global reqMgrURL
+        reqMgrURL = 'http://[' + req.client_addr + ']:2050/'
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
@@ -90,10 +93,13 @@ class MANO(ControllerBase):
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
         print("intraFuncInfo: ", intraFuncInfo)
-        mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
-        r = reqHandler.sendFuncInfo(mano_url, intraFuncInfo)
-        global resourceInfo
+        # mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
+        monitor_url = MonitorURL + 'monitor/req_inter'
+        r = reqHandler.sendGet(MonitorURL)
         resourceInfo = json.loads(r.text)
+        # global resourceInfo
+        print("resourceInfo: ", resourceInfo, "\n")
+
 
     def inter_region_path_comput(self, req):
         global reqMgrURL
@@ -109,12 +115,23 @@ class reqHandling(object):
     def __init__(self):
         super(reqHandling, self).__init__()
 
-    def sendFuncInfo(self, url, postMsg):
+    def sendPost(self, url, postMsg):
         s = json.dumps(postMsg)
         # keep = True
         # while keep:
         try:
             r = requests.post(url, data=s, timeout=5)
+            keep = False
+        except Exception as e:
+            print(datetime.datetime.now(), " Request failed!")
+        # r = requests.post(url, data=s, timeout=5)
+        return r
+
+    def sendGet(self, url):
+        # keep = True
+        # while keep:
+        try:
+            r = requests.get(url, timeout=5)
             keep = False
         except Exception as e:
             print(datetime.datetime.now(), " Request failed!")
@@ -134,16 +151,29 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        # global region_id
-        # if os.path.exists("region_id"):
-        #     f = open("region_id", "r")
-        #     region_id = f.readline()
-        #     f.close()
-        # else:
-        #     f = open("region_id", "w")
-        #     region_id = str(uuid.uuid4())
-        #     f.write(region_id)
-        #     f.close()
+        global MonitorURL
+        manoConfig = ""
+        if os.path.exists("config_mano"):
+            f = open("config_mano", "r")
+            manoConfig = f.readlines()
+            f.close()
+        else:
+            print("Cannot open config file for Request Manager !\n")
+            exit()
+
+        while len(manoConfig) != 0:
+            case1 = manoConfig[0].split()
+            if case1[0] == "Inter":
+                case2 = manoConfig[1].split()
+                MonitorURL = case2[1]
+                manoConfig.pop(1)
+                manoConfig.pop(0)
+            elif case1[0] == "Intra":
+                case2 = manoConfig[1].split()
+                MonitorURL = case2[1]
+                manoConfig.pop(1)
+                manoConfig.pop(0)
+
 
 
 

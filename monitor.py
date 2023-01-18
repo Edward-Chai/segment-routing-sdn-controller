@@ -145,6 +145,11 @@ class Monitor(ControllerBase):
             interRegionResourceInfoList.append(jsonMsg)
         print("interRegionResourceInfoList: ", interRegionResourceInfoList)
 
+    def reply_info_CD(self, req):
+        return Response(content_type='application/json', status=200, body=json.dumps(interRegionResourceInfoList),
+                        charset='utf8', headers=HEADERS)
+
+
 
 
 class reqHandling(object):
@@ -225,8 +230,8 @@ class InitMonitor(app_manager.RyuApp):
                        conditions=dict(method=['GET,POST']))
         uri = monitor_path + '/req_inter'
         mapper.connect('monitor', uri,
-                       controller=Monitor, action='req_for_inter',
-                       conditions=dict(method=['GET,POST']))
+                       controller=Monitor, action='reply_info_CD',
+                       conditions=dict(method=['GET']))
         uri = monitor_path + '/inter'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='intra_scope_to_inter',
