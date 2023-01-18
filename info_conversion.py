@@ -414,9 +414,9 @@ class info_conversion(object):
 
     def result_of_inter_region_path_comput(self, jsonMsg):
         resultOfInterPathComput = copy.deepcopy(result_of_inter_Region_path_computation)
-        resultOfInterPathComput["regionId"] = jsonMsg["regionId"]
-        resultOfInterPathComput["funcList"][0]["funcId"] = jsonMsg["dcFuncList"][0]["funcId"]
-        resultOfInterPathComput["funcList"][0]["funcParams"] = jsonMsg["dcFuncList"][0]["funcParams"]
+        resultOfInterPathComput["regionId"] = jsonMsg[0]["regionId"]
+        resultOfInterPathComput["funcList"][0]["funcId"] = jsonMsg[0]["dcFuncList"][0]["funcId"]
+        resultOfInterPathComput["funcList"][0]["funcParams"] = jsonMsg[0]["dcFuncList"][0]["funcParams"]
         return resultOfInterPathComput
 
     def request_of_global_func_deploy(self, jsonMsg):
