@@ -51,6 +51,7 @@ interRegionResourceInfoList = []
 interRegionResourceInfoRegionIdList = []
 CDInterRegionURL = ""
 PrimaryInterURL = ""
+CDInterRegionResourceInfoStorage = []
 
 class Monitor(ControllerBase):
 
@@ -116,24 +117,35 @@ class Monitor(ControllerBase):
 
 
     def intra_scope_to_inter(self, req, **kwargs):
-        global interRegionResourceInfoList, interRegionResourceInfoRegionIdList
+        global interRegionResourceInfoList, interRegionResourceInfoRegionIdList, CDInterRegionURL
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
+        CDInterRegionURL = CDInterRegionURL + 'monitor/cd'
+        reqHandler.sendFuncInfo(CDInterRegionURL, jsonMsg)
+        # print("interFuncInfo: ", jsonMsg)
+
+    def region_to_cd_resource_info(self , req):
+        req_body = req.body
+        LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
         if jsonMsg["regionId"] in interRegionResourceInfoRegionIdList:
             for Idx in range(len(interRegionResourceInfoList)):
                 if interRegionResourceInfoList[Idx]["regionId"] == jsonMsg["regionId"]:
                     interRegionResourceInfoList.pop(Idx)
-        else:
-            interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
-            interRegionResourceInfoList.append(jsonMsg)
+                    interRegionResourceInfoList.append(jsonMsg)
+                else:
+                    interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
+                    interRegionResourceInfoList.append(jsonMsg)
+        print("interRegionResourceInfoList: ", interRegionResourceInfoList)
 
-        infoConversion = info_conversion()
-        # reqHandler = reqHandling()
-        # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
-        print("interFuncInfo: ", jsonMsg)
+
 
 class reqHandling(object):
 
@@ -218,6 +230,10 @@ class InitMonitor(app_manager.RyuApp):
         uri = monitor_path + '/inter'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='intra_scope_to_inter',
+                       conditions=dict(method=['POST']))
+        uri = monitor_path + '/cd'
+        mapper.connect('monitor', uri,
+                       controller=Monitor, action='region_to_cd_resource_info',
                        conditions=dict(method=['POST']))
 
 '''
