@@ -84,6 +84,7 @@ class Monitor(ControllerBase):
     def dc_scope_to_intra(self, req, **kwargs):
         req_body = req.body
         LOG.debug(req_body)
+        print("req_body: ", req_body, "\n")
         msg_dec = req_body.decode()
         print("req.client_addr: ", req.client_addr)
         # LOG.info("msg_dec: ", msg_dec)
