@@ -140,9 +140,9 @@ class Monitor(ControllerBase):
                 if interRegionResourceInfoList[Idx]["regionId"] == jsonMsg["regionId"]:
                     interRegionResourceInfoList.pop(Idx)
                     interRegionResourceInfoList.append(jsonMsg)
-                else:
-                    interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
-                    interRegionResourceInfoList.append(jsonMsg)
+        else:
+            interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
+            interRegionResourceInfoList.append(jsonMsg)
         print("interRegionResourceInfoList: ", interRegionResourceInfoList)
 
 
