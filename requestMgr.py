@@ -124,6 +124,7 @@ class reqHandling(object):
         s = json.dumps(postMsg)
         # keep = True
         # while keep:
+        r = ""
         try:
             r = requests.post(url, data=s, timeout=5)
             keep = False
