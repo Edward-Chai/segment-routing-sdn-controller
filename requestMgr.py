@@ -96,7 +96,7 @@ class requestMgr(ControllerBase):
         reqHandler = reqHandling()
         interRegionPathComput = infoConversion.usr_req_to_req_of_inter_region_path_comput(jsonMsg)
         print("interRegionPathComput: ", interRegionPathComput)
-        mano_url = CDInterMANOURL + "/req/interRegionPathComput"
+        mano_url = CDInterMANOURL + "req/interRegionPathComput"
         reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
 
     def req_of_global_func_deployment(self, req):
