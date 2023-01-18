@@ -91,8 +91,9 @@ class Monitor(ControllerBase):
         infoConversion =info_conversion()
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
+        primary_inter = PrimaryInterURL + 'monitor/inter'
         # print("intraFuncInfo: ", intraFuncInfo)
-        reqHandler.sendFuncInfo(PrimaryInterURL, intraFuncInfo)
+        reqHandler.sendFuncInfo(primary_inter, intraFuncInfo)
 
 
     def req_for_intra(self, req, **kwargs):
