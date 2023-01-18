@@ -103,13 +103,13 @@ class MANO(ControllerBase):
 
 
 
-    def inter_region_path_comput(self, req):
-        global reqMgrURL
-        reqMgrURL = req.client_addr
-        req_body = req.body
-        LOG.debug(req_body)
-        msg_dec = req_body.decode()
-        print("req_body: ", req_body , "\n")
+    # def inter_region_path_comput(self, req):
+    #     global reqMgrURL
+    #     reqMgrURL = req.client_addr
+    #     req_body = req.body
+    #     LOG.debug(req_body)
+    #     msg_dec = req_body.decode()
+    #     print("req_body: ", req_body , "\n")
 
 
 class reqHandling(object):
