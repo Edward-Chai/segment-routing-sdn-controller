@@ -108,12 +108,12 @@ class requestMgr(ControllerBase):
         infoConversion =info_conversion()
         reqHandler = reqHandling()
         GlobalFuncDeploy = infoConversion.request_of_global_func_deploy(jsonMsg)
-        print("GlobalFuncDeploy: ", GlobalFuncDeploy)
-        mano_url = CDInterFuncURL + "req/interRegionPathComput"
-        reqHandler.sendFuncInfo(mano_url, GlobalFuncDeploy)
+        print("GlobalFuncDeploy: ", GlobalFuncDeploy + "\n")
+        interFuncURL = CDInterFuncURL + 'funcMgr/req/globalFuncDeploy'
+        reqHandler.sendFuncInfo(interFuncURL, GlobalFuncDeploy)
 
-    def req_of_global_func_deployment(self, req):
-        req_body = req.body
+    # def req_of_global_func_deployment(self, req):
+    #     req_body = req.body
 
 class reqHandling(object):
 
@@ -175,8 +175,8 @@ class InitMonitor(app_manager.RyuApp):
                        controller=requestMgr, action='req_send_to_mano',
                        conditions=dict(method=['POST']))
 
-        user_req_path = '/func'
-        uri = user_req_path + '/globalFuncDeploy'
+        func_path = '/func'
+        uri = func_path + '/globalFuncDeploy'
         mapper.connect('func', uri,
                        controller=requestMgr, action='req_of_global_func_deploy',
                        conditions=dict(method=['POST']))
