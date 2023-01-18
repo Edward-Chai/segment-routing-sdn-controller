@@ -153,22 +153,22 @@ class funcMgr(app_manager.RyuApp):
         super(funcMgr, self).__init__(*args, **kwargs)
         wsgi = kwargs['wsgi']
 
-        os.chdir("/home/edward/funcInfo/")
-        f = open("funcInfoList", "r")
+        # os.chdir("/home/edward/funcInfo/")
+        # f = open("funcInfoList", "r")
         region_id = ""
         infoConversion = info_conversion()
-        funcInfo = f.readlines()
-        f.close()
+        # funcInfo = f.readlines()
+        # f.close()
         f = open("monitorURL", "r")
         monitorURL = f.readline()
         monitorURL = monitorURL.strip()
-        dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
+        # dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
         # funcHandlingUtil = funcHandling()
-        jsonMsg = json.dumps(dcFuncInfoDict)
+        # jsonMsg = json.dumps(dcFuncInfoDict)
         f.close()
-        f = open("dcFuncList", "w")
-        f.write(jsonMsg)
-        f.close()
+        # f = open("dcFuncList", "w")
+        # f.write(jsonMsg)
+        # f.close()
         if os.path.exists("region_id"):
             f = open("region_id", "r")
             region_id = f.readline()
@@ -210,6 +210,17 @@ class funcMgr(app_manager.RyuApp):
             elif case1[0] == "DC":
                 case2 = funcMgrConfig[1].split()
                 IntraFuncURL_DC = case2[1]
+
+                os.chdir("/home/edward/funcInfo/")
+                f = open("funcInfoList", "r")
+                funcInfo = f.readlines()
+                f.close()
+                dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
+                jsonMsg = json.dumps(dcFuncInfoDict)
+                f = open("dcFuncList", "w")
+                f.write(jsonMsg)
+                f.close()
+
             else:
                 funcMgrConfig.pop(0)
 
