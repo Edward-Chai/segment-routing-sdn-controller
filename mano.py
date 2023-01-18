@@ -184,7 +184,7 @@ class InitMonitor(app_manager.RyuApp):
                        conditions=dict(method=['POST']))
         uri = mano_req_path + '/interRegionPathComput'
         mapper.connect('req', uri,
-                       controller=MANO, action='inter_region_path_comput',
+                       controller=MANO, action='req_of_regional_resource_info',
                        conditions=dict(method=['POST']))
         # uri = monitor_path + '/inter'
         # mapper.connect('monitor', uri,
