@@ -144,7 +144,7 @@ class InitMonitor(app_manager.RyuApp):
         user_req_path = '/usr'
 
         uri = user_req_path + '/Req'
-        mapper.connect('usr', user_req_path,
+        mapper.connect('usr', uri,
                        controller=requestMgr, action='req_send_to_mano',
                        conditions=dict(method=['POST']))
         # uri = monitor_path + '/inter'
