@@ -47,15 +47,25 @@ HEADERS = {
     'Access-Control-Allow-Methods': 'GET, POST',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
+regionId_addr_mapping = []
+CDinterURL = ""
+IntraMANOURL = ""
+IntraFuncURL_Inter = ""
+
+InterFuncURL = ""
+
+IntraFuncURL_DC = ""
+
 class FUNC_MGR_Controller(ControllerBase):
 
     def __init__(self, req, link, data, **config):
         super(FUNC_MGR_Controller, self).__init__(req, link, data, **config)
+        global regionId_addr_mapping
 
 
     def req_of_regional_func_deploy(self, req):
         infoConversion = info_conversion()
-        funcHandlingUtil = funcHandling()
+        # funcHandlingUtil = funcHandling()
         req_body = req.body
         msg_dec = req_body.decode()
         jsonMsg = json.loads(msg_dec)
@@ -68,7 +78,7 @@ class FUNC_MGR_Controller(ControllerBase):
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         print(jsonMsg, "\n")
-        funcHandlingUtil = funcHandling()
+        # funcHandlingUtil = funcHandling()
         # req_body_dec = req_body.decode('utf-8')
         # SRv6_match = SRv6_field_match()
         # iproute2u = iproute2_utils()
@@ -89,15 +99,28 @@ class FUNC_MGR_Controller(ControllerBase):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
-class funcHandling(object):
+    def request_of_regional_func_deploy(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        reqRegionalFuncDeploy = infoConversion.global_func_deploy_to_regional_func_deploy(jsonMsg)
+        print("requestOfGlobalFuncDeploy: ", reqRegionalFuncDeploy, "\n")
+        InterRegionFuncMgrURL = ""
+        r = reqHandler.sendPost(InterRegionFuncMgrURL, reqRegionalFuncDeploy)
+
+
+class reqHandling(object):
 
     def __init__(self):
-        super(funcHandling, self).__init__()
+        super(reqHandling, self).__init__()
 
-    def sendFuncInfo(self, url, postMsg):
+    def sendPost(self, url, postMsg):
         s = json.dumps(postMsg)
         # keep = True
         # while keep:
+        r = ""
         try:
             r = requests.post(url, data=s, timeout=5)
             keep = False
@@ -105,6 +128,20 @@ class funcHandling(object):
             print(datetime.datetime.now(), " Request failed!")
         # r = requests.post(url, data=s, timeout=5)
         return r
+
+    def sendGet(self, url):
+        # keep = True
+        # while keep:
+        r = ""
+        try:
+            r = requests.get(url, timeout=5)
+            keep = False
+        except Exception as e:
+            print(datetime.datetime.now(), " Request failed!")
+        # r = requests.post(url, data=s, timeout=5)
+        return r
+
+
 
 
 class funcMgr(app_manager.RyuApp):
@@ -126,7 +163,7 @@ class funcMgr(app_manager.RyuApp):
         monitorURL = f.readline()
         monitorURL = monitorURL.strip()
         dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
-        funcHandlingUtil = funcHandling()
+        # funcHandlingUtil = funcHandling()
         jsonMsg = json.dumps(dcFuncInfoDict)
         f.close()
         f = open("dcFuncList", "w")
@@ -141,6 +178,40 @@ class funcMgr(app_manager.RyuApp):
             region_id = str(uuid.uuid4())
             f.write(region_id)
             f.close()
+
+        funcMgrConfig = ""
+        if os.path.exists("config_funcMgr"):
+            f = open("config_funcMgr", "r")
+            funcMgrConfig = f.readlines()
+            f.close()
+        else:
+            print("Cannot open config file for Request Manager !\n")
+            exit()
+
+        global CDinterURL, IntraMANOURL, IntraFuncURL_Inter, InterFuncURL, IntraFuncURL_DC
+        while len(funcMgrConfig) != 0:
+            case1 = funcMgrConfig[0].split()
+            if case1[0] == "Inter" and case1[1] == "Primary":
+                case2 = funcMgrConfig[1].split()
+                case3 = funcMgrConfig[2].split()
+                case4 = funcMgrConfig[3].split()
+                CDinterURL = case2[1]
+                IntraMANOURL = case3[1]
+                IntraFuncURL_Inter = case4[1]
+                funcMgrConfig.pop(3)
+                funcMgrConfig.pop(2)
+                funcMgrConfig.pop(1)
+                funcMgrConfig.pop(0)
+            elif case1[0] == "Intra":
+                case2 = funcMgrConfig[1].split()
+                InterFuncURL = case2[1]
+                funcMgrConfig.pop(1)
+                funcMgrConfig.pop(0)
+            elif case1[0] == "DC":
+                case2 = funcMgrConfig[1].split()
+                IntraFuncURL_DC = case2[1]
+            else:
+                funcMgrConfig.pop(0)
 
 
         # reqResult = funcHandlingUtil.sendFuncInfo(monitorURL, dcFuncInfoDict)
@@ -157,10 +228,10 @@ class funcMgr(app_manager.RyuApp):
         # mapper.connect('sr_rules', uri,
         #                controller=SR_API_Controller, action='insert_single_flow',
         #                conditions=dict(method=['POST']))
-        monitor_path = '/funcMgr'
+        monitor_path = '/funcMgr/req'
         uri = monitor_path + '/globalFuncDeploy'
         mapper.connect('funcMgr', uri,
-                       controller=FUNC_MGR_Controller, action='req_of_regional_func_deploy',
+                       controller=FUNC_MGR_Controller, action='request_of_regional_func_deploy',
                        conditions=dict(method=['POST']))
 
 '''

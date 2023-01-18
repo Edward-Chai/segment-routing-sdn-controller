@@ -81,9 +81,9 @@ class MANO(ControllerBase):
         return Response(content_type='application/json', status=200, body=json.dumps("TEST OK!"),
                         charset='utf8', headers=HEADERS)
 
-    def req_of_regional_resource_info(self, req, **kwargs):
+    def inter_region_path_comput(self, req, **kwargs):
         global reqMgrURL
-        reqMgrURL = 'http://[' + req.client_addr + ']:2050/'
+        reqMgrURL = 'http://[' + req.client_addr + ']:2000/'
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
@@ -99,6 +99,8 @@ class MANO(ControllerBase):
         resourceInfo = json.loads(r.text)
         # global resourceInfo
         print("resourceInfo: ", resourceInfo, "\n")
+        resultOfInterPathComput = infoConversion.result_of_inter_region_path_comput(resourceInfo)
+
 
 
     def inter_region_path_comput(self, req):
@@ -131,6 +133,7 @@ class reqHandling(object):
     def sendGet(self, url):
         # keep = True
         # while keep:
+        r = ""
         try:
             r = requests.get(url, timeout=5)
             keep = False
@@ -185,7 +188,7 @@ class InitMonitor(app_manager.RyuApp):
                        conditions=dict(method=['POST']))
         uri = mano_req_path + '/interRegionPathComput'
         mapper.connect('req', uri,
-                       controller=MANO, action='req_of_regional_resource_info',
+                       controller=MANO, action='inter_region_path_comput',
                        conditions=dict(method=['POST']))
         # uri = monitor_path + '/inter'
         # mapper.connect('monitor', uri,

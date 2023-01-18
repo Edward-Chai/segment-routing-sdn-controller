@@ -99,6 +99,19 @@ class requestMgr(ControllerBase):
         mano_url = CDInterMANOURL + "req/interRegionPathComput"
         reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
 
+    def req_of_global_func_deploy(self, req, **kwargs):
+        req_body = req.body
+        LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        # LOG.info("msg_dec: ", msg_dec)
+        jsonMsg = json.loads(msg_dec)
+        infoConversion =info_conversion()
+        reqHandler = reqHandling()
+        GlobalFuncDeploy = infoConversion.request_of_global_func_deploy(jsonMsg)
+        print("GlobalFuncDeploy: ", GlobalFuncDeploy)
+        mano_url = CDInterFuncURL + "req/interRegionPathComput"
+        reqHandler.sendFuncInfo(mano_url, GlobalFuncDeploy)
+
     def req_of_global_func_deployment(self, req):
         req_body = req.body
 

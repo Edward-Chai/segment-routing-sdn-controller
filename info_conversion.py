@@ -111,11 +111,7 @@ request_of_Global_Function_Deployment = {
         "validTime": None,
         "taskName": None,
         "regionId": None,
-        "funcList": [{
-            "taskIdInternal": None,
-            "funcId": None,
-            "funcParams": None
-        }]
+        "funcList": []
     }
 
 request_of_Regional_Function_Deployment = {
@@ -171,6 +167,14 @@ function_Info_Synchronization = {
             }
         }]
 }
+
+result_of_inter_Region_path_computation = {
+        "regionId": None,
+        "funcList": [{
+            "funcId": None,
+            "funcParams": None
+        }]
+    }
 
 request_of_intra_Region_path_computation = {
         "validTime": None,
@@ -407,6 +411,22 @@ class info_conversion(object):
         request_of_inter_region_path_comput["Customization"] = jsonMsg["Customization"]
         request_of_inter_region_path_comput["locality"] = "0001"
         return request_of_inter_region_path_comput
+
+    def result_of_inter_region_path_comput(self, jsonMsg):
+        resultOfInterPathComput = copy.deepcopy(result_of_inter_Region_path_computation)
+        resultOfInterPathComput["regionId"] = jsonMsg["regionId"]
+        resultOfInterPathComput["funcList"][0]["funcId"] = jsonMsg["dcFuncList"][0]["funcId"]
+        resultOfInterPathComput["funcList"][0]["funcParams"] = jsonMsg["dcFuncList"][0]["funcParams"]
+        return resultOfInterPathComput
+
+    def request_of_global_func_deploy(self, jsonMsg):
+        requestOfGlobalFunctionDeployment = copy.deepcopy(request_of_Global_Function_Deployment)
+        requestOfGlobalFunctionDeployment["validTime"] = "100000000"
+        requestOfGlobalFunctionDeployment["taskName"] = "TEST"
+        requestOfGlobalFunctionDeployment["regionId"] = jsonMsg["regionId"]
+        requestOfGlobalFunctionDeployment["funcList"] = jsonMsg["funcList"]
+        requestOfGlobalFunctionDeployment["funcList"][0].update({"taskIdInternal": "00000001"})
+        return requestOfGlobalFunctionDeployment
 
     def global_func_deploy_to_regional_func_deploy(self, jsonMsg):
         regionalFuncDeploy = copy.deepcopy(request_of_Regional_Function_Deployment)
