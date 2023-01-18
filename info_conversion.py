@@ -16,10 +16,12 @@ import copy
 # !/usr/bin/python
 
 import logging
+import os
+import uuid
 
 LOG = logging.getLogger('ryu.app.info_conversion')
 LOG.setLevel(logging.INFO)
-
+contentProviderId = ""
 
 dc_Scope_Resource_Info = {  # all supported match fields. eg, curl -d "match="in_port=1,out_port=2,nw_src=::01""
         "dcId": None,
@@ -61,9 +63,9 @@ regional_Scope_Resource_Info = {
         "regionId": None,
         "interRegionLink": [{
             "linkId": None,
-            "inbound": 0,
+            "inbound": 1024,
             "inboundUsage": float(0),
-            "outbound": 0,
+            "outbound": 1024,
             "outboundUsage": float(0)
         }],
         "regionalCPUClockRate": 0,
@@ -107,49 +109,25 @@ usr_Req = {  # all supported match fields. eg, curl -d "match="in_port=1,out_por
 
 request_of_Global_Function_Deployment = {
         "validTime": None,
-        "pathComputationResult": [{
-            "taskName": None,
-            "taskIdInteral": None,
-            "regionId": None,
-            "funcList": [{
-                "funcId": None,
-                "funcParams": None
-            }]
+        "taskName": None,
+        "regionId": None,
+        "funcList": [{
+            "taskIdInternal": None,
+            "funcId": None,
+            "funcParams": None
         }]
     }
 
 request_of_Regional_Function_Deployment = {
-        "contentId": None,
+        "cdId": None,
+        "taskName": None,
         "validTime": None,
-        "pathComputationResultList": [{
-            "taskName": None,
-            "taskIdInteral": None,
-            "funcList": [{
-                "funcId": None,
-                "funcParams": None
-            }]
-        }]
+        "funcList": []
     }
 
-result_of_Global_Function_Offloading = {
+result_of_Global_Function_deployment = {
         "globalStatusCode": None,
-        "regionalFunctionDeploymentList": {
-            "regionalStatusCode": None,
-            "regionId": None,
-            "dcList": [{
-                "dcId": None,
-                "routerNodeList": [{
-                    "ingressSID": None,
-                    "egressSID": None,
-                    "statusCode": None
-                }],
-                "machineList": [{
-                    "functionId": None,
-                    "machineAddr": None,
-                    "statusCode": None
-                }]
-            }]
-        }
+        "regionalFunctionDeploymentList": []
     }
 
 result_of_Regional_Function_Offloading = {
@@ -196,16 +174,8 @@ function_Info_Synchronization = {
 
 request_of_intra_Region_path_computation = {
         "validTime": None,
-        "pathComputationResultList": {
-            "taskIdInternal": None,
-            "funcList": [{
-                "funcId": None,
-                "funcParams": [{
-                    "cmdKey": None,
-                    "cmdVal": None
-                }]
-            }]
-        }
+        "taskIdInternal": None,
+        "funcList": []
     }
 
 result_of_intra_region_path_comput = {
@@ -236,30 +206,28 @@ result_of_intra_region_path_comput = {
         }
 }
 
-request_of_dc_function_deployment = {
+request_of_regional_function_offloading = {
         "validTime": None,
-        "pathComputationResultList": {
-            "taskIdRegional": None,
-            "dcList": [{
-                "dcId": None,
-                "dcIngressIp6": None,
-                "dcIngressSID": None,
-                "dcEgressIp6": None,
-                "dcEgressSID": None,
-                "machineList": [{
-                    "machineAddr": None,
-                    "machineSID": None,
+        "taskIdRegional": None,
+        "dcList": [{
+            "dcId": None,
+            "dcIngressIp6": None,
+            "dcIngressSID": None,
+            "dcEgressIp6": None,
+            "dcEgressSID": None,
+            "machineList": [{
+                "machineAddr": None,
+                "machineSID": None,
+                "funcId": None,
+                "funcParam": [{
                     "funcId": None,
-                    "funcParam": [{
-                        "funcId": None,
-                        "funcParams": [{
-                            "cmdKey": None,
-                            "cmdVal": None
-                        }]
+                    "funcParams": [{
+                        "cmdKey": None,
+                        "cmdVal": None
                     }]
                 }]
             }]
-        }
+        }]
 }
 
 request_of_dc_scope_function_deployment = {
@@ -299,7 +267,8 @@ result_of_dc_scope_function_deployment = {
     }
 
 result_of_regional_function_deployment = {
-        "taskIdRegional": None,
+        "regionId": None,
+        "regionStatusCode": None,
         "dcList": [{
             "dcId": None,
             "routerNodeList": [{
@@ -308,6 +277,7 @@ result_of_regional_function_deployment = {
                 "statusCode": None
             }],
             "machineList": [{
+                "taskIdRegional": None,
                 "funcId": None,
                 "machineId": None,
                 "statusCode": None
@@ -327,7 +297,28 @@ request_of_inter_region_path_comput = {
 
 dcIdList = []
 
+cpId_taskId_mapping = [{
+    "cdId": None,
+    "taskIdInternal": [],
+    "taskIdRegional": []
+}]
+
 class info_conversion(object):
+    def __init__(self, **kwagrs):
+        super(info_conversion, self).__init__()
+
+        os.chdir("/home/edward/funcInfo/")
+        global contentProviderId
+        global cpId_taskId_mapping
+        if os.path.exists("cdId"):
+            f = open("cdId", "r")
+            region_id = f.readline()
+            f.close()
+        else:
+            f = open("cdId", "w")
+            region_id = str(uuid.uuid4())
+            f.write(region_id)
+            f.close()
 
 
     # Valid time: 10000000
@@ -417,6 +408,147 @@ class info_conversion(object):
         request_of_inter_region_path_comput["locality"] = "0001"
         return request_of_inter_region_path_comput
 
-    def __init__(self, **kwagrs):
-        super(info_conversion, self).__init__()
+    def global_func_deploy_to_regional_func_deploy(self, jsonMsg):
+        regionalFuncDeploy = copy.deepcopy(request_of_Regional_Function_Deployment)
+        regionalFuncDeploy["validTime"] = jsonMsg["validTime"]
+        regionalFuncDeploy["cdId"] = contentProviderId
+        regionalFuncDeploy["funcList"] = jsonMsg["funcList"]
+        regionalFuncDeploy["taskName"] = jsonMsg["taskName"]
+        # regionalFuncDeploy["taskIdInternal"] = jsonMsg["taskIdInternal"]
+        return regionalFuncDeploy
 
+    def req_of_intra_region_path_comput(self, jsonMsg):
+        reqIntraRegionPathComput = copy.deepcopy(request_of_intra_Region_path_computation)
+        reqIntraRegionPathComput["validTime"] = jsonMsg["validTime"]
+        cdId_exist = 0
+        cdId_Idx = 0
+        for idx in range(len(cpId_taskId_mapping)):
+            if cpId_taskId_mapping[idx]["cdId"] == jsonMsg["cdId"]:
+                cdId_exist = 1
+                cdId_Idx = idx
+
+        if cdId_exist == 0 and len(cpId_taskId_mapping) >= 1:
+            mappingList = copy.deepcopy(cpId_taskId_mapping[0])
+            mappingList["cdId"] = jsonMsg["cdId"]
+            for item in jsonMsg["funcList"]:
+                mappingList["taskIdInternal"].append(item["taskIdInternal"])
+            cpId_taskId_mapping.append(mappingList)
+        elif cdId_exist == 0 and (cpId_taskId_mapping[0]["cdId"] is None):
+            cpId_taskId_mapping[0]["cdId"] = jsonMsg["cdId"]
+            for item in jsonMsg["funcList"]:
+                cpId_taskId_mapping[0]["taskIdInternal"].append(item["taskIdInternal"])
+        elif cdId_exist == 1:
+            for item in jsonMsg["funcList"]:
+                cpId_taskId_mapping[cdId_Idx]["taskIdInternal"].append(item["taskIdInternal"])
+        reqIntraRegionPathComput["funcList"] = jsonMsg["funcList"]
+        return reqIntraRegionPathComput
+
+
+    def req_of_regional_func_offloading(self, jsonMsg):
+        reqRegionalFuncOffloading = copy.deepcopy(request_of_regional_function_offloading)
+        reqRegionalFuncOffloading["validTime"] = jsonMsg["validTime"]
+        internal = []
+        regional = []
+        for item in jsonMsg["dcList"]:
+            for ml in item["machineList"]:
+                internal.append(ml["taskIdInternal"])
+                regional.append(ml["taskIdRegional"])
+                ml.pop("taskIdInternal")
+
+        for idx in range(len(cpId_taskId_mapping)):
+            if internal[0] in cpId_taskId_mapping[idx]["taskIdInternal"]:
+                cpId_taskId_mapping[idx]["taskIdRegional"].extend(regional)
+        reqRegionalFuncOffloading["dcList"] = jsonMsg["dcList"]
+        return reqRegionalFuncOffloading
+
+    def req_of_dc_scope_func_deploy(self, jsonMsg, dcId):
+        dcScopeFuncDeploy = copy.deepcopy(request_of_dc_scope_function_deployment)
+        dcScopeFuncDeploy["validTime"] = jsonMsg["validTime"]
+        # dcScopeFuncDeploy["taskIdRegional"] = jsonMsg["taskIdRegional"]
+        for item in jsonMsg["dcList"]:
+            if item["dcId"] == dcId:
+                dcScopeFuncDeploy["dcIngressIp6"] = item["dcIngressIp6"]
+                dcScopeFuncDeploy["dcIngressSID"] = item["dcIngressSID"]
+                dcScopeFuncDeploy["dcEgressIp6"] = item["dcEgressIp6"]
+                dcScopeFuncDeploy["dcEgressSID"]= item["dcEgressSID"]
+                dcScopeFuncDeploy["machineList"] = item["machineList"]
+        return dcScopeFuncDeploy
+
+    def result_of_regional_func_deployment(self, jsonMsg, regionId):
+        global result_of_regional_function_deployment
+        result_of_regional_function_deployment["regionId"] = regionId
+        regional = []
+        regional_info = []
+        dc_exist = 0
+        dc_idx = 0
+        isAll = 0
+        for idx in range(len(result_of_regional_function_deployment["dcList"])):
+            if jsonMsg["dcId"] == result_of_regional_function_deployment["dcList"][idx]["dcId"]:
+                dc_exist = 1
+                dc_idx = idx
+                break
+
+
+        if dc_exist:
+            result_of_regional_function_deployment["dcList"][dc_idx]["routerNodeList"] = jsonMsg["routerNodeList"]
+            result_of_regional_function_deployment["dcList"][dc_idx]["machineList"] = jsonMsg["machineList"]
+        elif (len(result_of_regional_function_deployment["dcList"]) == 1) and (result_of_regional_function_deployment["dcList"][0]["dcId"] is None):
+            result_of_regional_function_deployment["dcList"][0]["routerNodeList"] = jsonMsg["routerNodeList"]
+            result_of_regional_function_deployment["dcList"][0]["machineList"] = jsonMsg["machineList"]
+            result_of_regional_function_deployment["dcList"][0]["dcId"] = jsonMsg["dcId"]
+        else:
+            item = copy.deepcopy(result_of_regional_function_deployment["dcList"][0])
+            item["dcId"] = jsonMsg["dcId"]
+            item["machineList"] = jsonMsg["machineList"]
+            item["routerNodeList"] = jsonMsg["routerNodeList"]
+            result_of_regional_function_deployment["dcList"].append(item)
+
+        for item in cpId_taskId_mapping:
+            if result_of_regional_function_deployment["dcList"][0]["machineList"][0]["taskIdRegional"] in item["taskIdRegional"]:
+                regional = item["taskIdRegional"]
+
+        for item in result_of_regional_function_deployment["dcList"]:
+            for machine in item["machineList"]:
+                regional_info.append(machine["taskIdRegional"])
+
+        regional.sort()
+        regional_info.sort()
+        if regional_info == regional:
+            isAll = 1
+        else:
+            isAll = 0
+
+        if isAll:
+            regionalStatus = 1
+            for item in result_of_regional_function_deployment["dcList"]:
+                for router in item["routerNodeList"]:
+                    if router["statusCode"] == "0000":
+                        regionalStatus = 0
+                        break
+                if regionalStatus == 0:
+                    break
+                for machine in item["machineList"]:
+                    if machine["statusCode"] == "0000":
+                        regionalStatus = 0
+                        break
+            if regionalStatus == 1:
+                result_of_regional_function_deployment["regionStatusCode"] = "0001"
+
+        return result_of_regional_function_deployment, isAll
+
+
+
+    def resultof_global_func_deploy(self, jsonMsg):
+        global result_of_Global_Function_deployment
+        globalStatus = 1
+        # resultRegionalFuncDeploy = result_of_Global_Function_deployment
+        result_of_Global_Function_deployment["regionalFunctionDeploymentList"].append(jsonMsg)
+        for item in result_of_Global_Function_deployment["regionalFunctionDeploymentList"]:
+            if item["regionStatusCode"] == "0000":
+                globalStatus = 0
+                break
+        if globalStatus == 1:
+            result_of_Global_Function_deployment["globalStatusCode"] = "0001"
+
+        return result_of_Global_Function_deployment
+    "转换taskid，两个mano，来自各个region是否齐全"

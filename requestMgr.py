@@ -47,6 +47,8 @@ HEADERS = {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, X-Requested-With'}
 
 region_id = ""
+usr_ip_task_dict = {}
+usr_ip_task_dict_Idx = 0
 
 class requestMgr(ControllerBase):
 
@@ -78,9 +80,12 @@ class requestMgr(ControllerBase):
                         charset='utf8', headers=HEADERS)
 
     def req_send_to_mano(self, req, **kwargs):
+        global usr_ip_task_dict, usr_ip_task_dict_Idx
         req_body = req.body
         LOG.debug(req_body)
         msg_dec = req_body.decode()
+        usr_ip = req.client_addr
+        usr_ip_task_dict.update({usr_ip: []})
         # LOG.info("msg_dec: ", msg_dec)
         jsonMsg = json.loads(msg_dec)
         infoConversion =info_conversion()
@@ -90,7 +95,8 @@ class requestMgr(ControllerBase):
         mano_url = "http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter"
         reqHandler.sendFuncInfo(mano_url, intraFuncInfo)
 
-
+    def req_of_global_func_deployment(self, req):
+        req_body = req.body
 
 class reqHandling(object):
 

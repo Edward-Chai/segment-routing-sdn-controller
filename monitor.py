@@ -49,6 +49,8 @@ HEADERS = {
 region_id = ""
 interRegionResourceInfoList = []
 interRegionResourceInfoRegionIdList = []
+CDInter = ""
+PrimaryInter = ""
 
 class Monitor(ControllerBase):
 
@@ -90,7 +92,25 @@ class Monitor(ControllerBase):
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         # print("intraFuncInfo: ", intraFuncInfo)
-        # reqHandler.sendFuncInfo("http://[2001:200:0:6811:2000:100:0:1]:8000/monitor/inter", intraFuncInfo)
+        reqHandler.sendFuncInfo(PrimaryInter, intraFuncInfo)
+
+
+    def req_for_list(self, req, **kwargs):
+        global interRegionResourceInfoList
+        req_body = req.body
+        LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        print("req.client_addr: ", req.client_addr)
+        # LOG.info("msg_dec: ", msg_dec)
+        # jsonMsg = json.loads(msg_dec)
+        # infoConversion =info_conversion()
+        # reqHandler = reqHandling()
+        # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
+        # print("intraFuncInfo: ", intraFuncInfo)
+        # reqHandler.sendFuncInfo(PrimaryInter, intraFuncInfo)
+        return Response(content_type='application/json', status=200, body=json.dumps(interRegionResourceInfoList),
+                        charset='utf8', headers=HEADERS)
+
 
 
     def intra_scope_to_inter(self, req, **kwargs):
@@ -108,7 +128,7 @@ class Monitor(ControllerBase):
             interRegionResourceInfoRegionIdList.append(jsonMsg["regionId"])
             interRegionResourceInfoList.append(jsonMsg)
 
-        # infoConversion = info_conversion()
+        infoConversion = info_conversion()
         # reqHandler = reqHandling()
         # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         print("interFuncInfo: ", jsonMsg)
@@ -143,7 +163,7 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        global region_id
+        global region_id, CDInter, PrimaryInter
         if os.path.exists("region_id"):
             f = open("region_id", "r")
             region_id = f.readline()
@@ -154,6 +174,32 @@ class InitMonitor(app_manager.RyuApp):
             f.write(region_id)
             f.close()
 
+        config = ""
+        if os.path.exists("config_monitor"):
+            f = open("config_monitor", "r")
+            config = f.readlines()
+            f.close()
+        else:
+            print("Cannot find configuration file for monitor!")
+            exit()
+
+        while len(config) != 0:
+            case1 = config[0].split()
+            if case1[0] == "Inter" and case1[1] == "Primary":
+                case2 = config[1].split()
+                CDInter = case2[1]
+                config.pop(1)
+                config.pop(0)
+            elif case1[0] == "Intra":
+                case2 = config[1].split()
+                PrimaryInter = case2[1]
+                config.pop(1)
+                config.pop(0)
+            else:
+                config.pop(1)
+                config.pop(0)
+
+
 
 
         monitor_path = '/monitor'
@@ -161,6 +207,10 @@ class InitMonitor(app_manager.RyuApp):
         mapper.connect('monitor', uri,
                        controller=Monitor, action='dc_scope_to_intra',
                        conditions=dict(method=['POST']))
+        uri = monitor_path + '/req'
+        mapper.connect('monitor', uri,
+                       controller=Monitor, action='dc_scope_to_intra',
+                       conditions=dict(method=['GET,POST']))
         uri = monitor_path + '/inter'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='intra_scope_to_inter',

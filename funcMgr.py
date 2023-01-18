@@ -52,6 +52,14 @@ class FUNC_MGR_Controller(ControllerBase):
     def __init__(self, req, link, data, **config):
         super(FUNC_MGR_Controller, self).__init__(req, link, data, **config)
 
+
+    def req_of_regional_func_deploy(self, req):
+        infoConversion = info_conversion()
+        funcHandlingUtil = funcHandling()
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+
     def dc_scope_to_intra(self, req, **kwargs):
         req_body = req.body
 
@@ -149,10 +157,10 @@ class funcMgr(app_manager.RyuApp):
         # mapper.connect('sr_rules', uri,
         #                controller=SR_API_Controller, action='insert_single_flow',
         #                conditions=dict(method=['POST']))
-        monitor_path = '/monitor'
-        uri = monitor_path + '/dcScope'
-        mapper.connect('monitor', uri,
-                       controller=FUNC_MGR_Controller, action='dc_scope_to_intra',
+        monitor_path = '/funcMgr'
+        uri = monitor_path + '/globalFuncDeploy'
+        mapper.connect('funcMgr', uri,
+                       controller=FUNC_MGR_Controller, action='req_of_regional_func_deploy',
                        conditions=dict(method=['POST']))
 
 '''

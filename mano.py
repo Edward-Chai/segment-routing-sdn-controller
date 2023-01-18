@@ -92,7 +92,8 @@ class MANO(ControllerBase):
         global resourceInfo
         resourceInfo = json.loads(r.text)
 
-    def inter_region_path_comput(self):
+    # def inter_region_path_comput(self):
+
 
 
 class reqHandling(object):
