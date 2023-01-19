@@ -106,7 +106,7 @@ class FUNC_MGR_Controller(ControllerBase):
         infoConversion = info_conversion()
         reqHandler = reqHandling()
         reqRegionalFuncDeploy = infoConversion.global_func_deploy_to_regional_func_deploy(jsonMsg)
-        print("requestOfGlobalFuncDeploy: ", reqRegionalFuncDeploy, "\n")
+        print("reqRegionalFuncDeploy: ", reqRegionalFuncDeploy, "\n")
         # InterRegionFuncMgrURL = ""
         # r = reqHandler.sendPost(InterRegionFuncMgrURL, reqRegionalFuncDeploy)
 
