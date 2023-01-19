@@ -134,6 +134,7 @@ class FUNC_MGR_Controller(ControllerBase):
         reqHandler = reqHandling()
         reqDCSCopeFuncdeploy = infoConversion.req_of_dc_scope_func_deploy(jsonMsg)
         dc_func_mgr_url = "http://[2001:200:0:6811:2000::1]:2010/funcMgr/req/dcScopeFuncDeploy"
+        print("dc_func_mgr_url: ", dc_func_mgr_url, "\n")
         r = reqHandler.sendPost(dc_func_mgr_url, reqDCSCopeFuncdeploy)
 
     def request_dc_scope_func_deploy(self, req):
@@ -145,12 +146,12 @@ class FUNC_MGR_Controller(ControllerBase):
         print("dc_jsonmsg: ", jsonMsg, "\n")
 
 
-    def request_of_regional_func_offloading(self, req):
-        req_body = req.body
-        msg_dec = req_body.decode()
-        jsonMsg = json.loads(msg_dec)
-        infoConversion = info_conversion()
-        reqHandler = reqHandling()
+    # def request_of_regional_func_offloading(self, req):
+    #     req_body = req.body
+    #     msg_dec = req_body.decode()
+    #     jsonMsg = json.loads(msg_dec)
+    #     infoConversion = info_conversion()
+    #     reqHandler = reqHandling()
 
 
 class reqHandling(object):
