@@ -113,6 +113,7 @@ class Monitor(ControllerBase):
 
 
     def req_for_intra(self, req, **kwargs):
+        print("intraRegionResourceInfoList: ", intraRegionResourceInfoList, "\n")
         # global interRegionResourceInfoList
         # req_body = req.body
         # LOG.debug(req_body)
