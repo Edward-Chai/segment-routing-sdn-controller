@@ -120,7 +120,36 @@ class FUNC_MGR_Controller(ControllerBase):
         intra_mano_url = IntraMANOURL + 'req/intraRegionPathComput'
         print("intra_mano_url: ", intra_mano_url, "\n")
         r = reqHandler.sendPost(intra_mano_url, reqIntraRegionPathComput)
-        print("jsonMsg:", jsonMsg, "\n")
+        result = json.loads(r.text)
+        reqIntraRegionalFuncOffload = infoConversion.req_of_regional_func_offloading(result)
+        intra_funcmgr_url = IntraFuncURL_Inter + 'funcMgr/req/regionalFuncOffloading'
+        r = reqHandler.sendPost(intra_funcmgr_url, reqIntraRegionalFuncOffload)
+
+    def request_of_regional_function_offloading(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        reqDCSCopeFuncdeploy = infoConversion.req_of_dc_scope_func_deploy(jsonMsg)
+        dc_func_mgr_url = "http://[2001:200:0:6811:2000::1]:2010/funcMgr/req/dcScopeFuncDeploy"
+        r = reqHandler.sendPost(dc_func_mgr_url, reqDCSCopeFuncdeploy)
+
+    def request_dc_scope_func_deploy(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        print("dc_jsonmsg: ", jsonMsg, "\n")
+
+
+    def request_of_regional_func_offloading(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
 
 
 class reqHandling(object):
@@ -260,6 +289,14 @@ class funcMgr(app_manager.RyuApp):
         uri = monitor_path + '/regionalFuncDeploy'
         mapper.connect('funcMgr', uri,
                        controller=FUNC_MGR_Controller, action='request_of_intra_region_path_comput',
+                       conditions=dict(method=['POST']))
+        uri = monitor_path + '/regionalFuncOffloading'
+        mapper.connect('funcMgr', uri,
+                       controller=FUNC_MGR_Controller, action='request_of_regional_func_offloading',
+                       conditions=dict(method=['POST']))
+        uri = monitor_path + '/dcScopeFuncDeploy'
+        mapper.connect('funcMgr', uri,
+                       controller=FUNC_MGR_Controller, action='request_dc_scope_func_deploy',
                        conditions=dict(method=['POST']))
 
 '''

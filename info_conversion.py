@@ -183,30 +183,25 @@ request_of_intra_Region_path_computation = {
 
 result_of_intra_region_path_comput = {
         "validTime": None,
-        "pathComputationResultList": {
-            "taskName": None,
-            "taskIdInternal": None,
-            "taskIdRegional": None,
-            "dcList": [{
-                "dcId": None,
-                "dcIngressIp6": None,
-                "dcIngressSID": None,
-                "dcEgressIp6": None,
-                "dcEgressSID": None,
-                "machineList": [{
-                    "machineAddr": None,
-                    "machineSID": None,
-                    "funcId": None,
-                    "funcParam": [{
-                        "funcId": None,
-                        "funcParams": [{
-                            "cmdKey": None,
-                            "cmdVal": None
-                        }]
-                    }]
+        "dcList": [{
+            "dcId": None,
+            "dcIngressIp6": None,
+            "dcIngressSID": None,
+            "dcEgressIp6": None,
+            "dcEgressSID": None,
+            "machineList": [{
+                "taskIdInternal": None,
+                "taskIdRegional": None,
+                "machineAddr": None,
+                "machineSID": None,
+                "funcId": None,
+                "funcParams": [{
+                    "cmdKey": None,
+                    "cmdVal": None
                 }]
             }]
-        }
+        }]
+
 }
 
 request_of_regional_function_offloading = {
@@ -480,17 +475,14 @@ class info_conversion(object):
         reqRegionalFuncOffloading["dcList"] = jsonMsg["dcList"]
         return reqRegionalFuncOffloading
 
-    def req_of_dc_scope_func_deploy(self, jsonMsg, dcId):
+    def req_of_dc_scope_func_deploy(self, jsonMsg):
         dcScopeFuncDeploy = copy.deepcopy(request_of_dc_scope_function_deployment)
         dcScopeFuncDeploy["validTime"] = jsonMsg["validTime"]
-        # dcScopeFuncDeploy["taskIdRegional"] = jsonMsg["taskIdRegional"]
-        for item in jsonMsg["dcList"]:
-            if item["dcId"] == dcId:
-                dcScopeFuncDeploy["dcIngressIp6"] = item["dcIngressIp6"]
-                dcScopeFuncDeploy["dcIngressSID"] = item["dcIngressSID"]
-                dcScopeFuncDeploy["dcEgressIp6"] = item["dcEgressIp6"]
-                dcScopeFuncDeploy["dcEgressSID"]= item["dcEgressSID"]
-                dcScopeFuncDeploy["machineList"] = item["machineList"]
+        dcScopeFuncDeploy["dcIngressIp6"] = jsonMsg["dcList"][0]["dcIngressIp6"]
+        dcScopeFuncDeploy["dcIngressSID"] = jsonMsg["dcList"][0]["dcIngressSID"]
+        dcScopeFuncDeploy["dcEgressIp6"] = jsonMsg["dcList"][0]["dcEgressIp6"]
+        dcScopeFuncDeploy["dcEgressSID"]= jsonMsg["dcList"][0]["dcEgressSID"]
+        dcScopeFuncDeploy["machineList"] = jsonMsg["dcList"][0]["machineList"]
         return dcScopeFuncDeploy
 
     def result_of_regional_func_deployment(self, jsonMsg, regionId):
@@ -554,6 +546,27 @@ class info_conversion(object):
                 result_of_regional_function_deployment["regionStatusCode"] = "0001"
 
         return result_of_regional_function_deployment, isAll
+
+    def result_of_intra_region_path_comput(self, jsonMsg, jsonMsg1):
+        intraRegionPathComput = copy.deepcopy(result_of_intra_region_path_comput)
+        intraRegionPathComput["validTime"] = "10000000"
+        intraRegionPathComput["dcList"][0]["dcId"] = jsonMsg[0]["dcid"]
+        intraRegionPathComput["dcList"][0]["dcIngressIp6"] = jsonMsg[0]["dc_router_node_info"][0]["ip6addr"]
+        intraRegionPathComput["dcList"][0]["dcEgressIp6"] = jsonMsg[0]["dc_router_node_info"][0]["ip6addr"]
+        intraRegionPathComput["dcList"][0]["dcIngressSID"] = ""
+        ipv6addrs = intraRegionPathComput["dcList"][0]["dcIngressIp6"].split(":")
+        for idx in range(len(ipv6addrs)):
+            intraRegionPathComput["dcList"][0]["dcIngressSID"] += ipv6addrs[idx]
+            if idx+2 != len(ipv6addrs):
+                intraRegionPathComput["dcList"][0]["dcIngressSID"] += ":"
+        intraRegionPathComput["dcList"][0]["dcEgressSID"] = intraRegionPathComput["dcList"][0]["dcIngressSID"]
+        intraRegionPathComput["dcList"][0]["machineList"][0]["taskIdInternal"] = jsonMsg1["funcList"][0]["taskIdInternal"]
+        intraRegionPathComput["dcList"][0]["machineList"][0]["taskIdRegional"] = "00000001"
+        intraRegionPathComput["dcList"][0]["machineList"][0]["machineAddr"] = jsonMsg[0]["dc_machine_info"][0]["ip6addr"]
+        intraRegionPathComput["dcList"][0]["machineList"][0]["machineSID"] = ""
+        intraRegionPathComput["dcList"][0]["machineList"][0]["funcId"] = jsonMsg1["funcList"][0]["funcId"]
+        intraRegionPathComput["dcList"][0]["machineList"][0]["funcParams"] = jsonMsg1["funcList"][0]["funcParams"]
+        return intraRegionPathComput
 
 
 
