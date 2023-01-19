@@ -242,7 +242,7 @@ class InitMonitor(app_manager.RyuApp):
         uri = monitor_path + '/req_intra'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='req_for_intra',
-                       conditions=dict(method=['GET,POST']))
+                       conditions=dict(method=['GET']))
         uri = monitor_path + '/req_inter'
         mapper.connect('monitor', uri,
                        controller=Monitor, action='reply_info_CD',
