@@ -108,7 +108,7 @@ class requestMgr(ControllerBase):
         infoConversion =info_conversion()
         reqHandler = reqHandling()
         GlobalFuncDeploy = infoConversion.request_of_global_func_deploy(jsonMsg)
-        print("GlobalFuncDeploy: ", GlobalFuncDeploy + "\n")
+        print("GlobalFuncDeploy: ", GlobalFuncDeploy, "\n")
         interFuncURL = CDInterFuncURL + 'funcMgr/req/globalFuncDeploy'
         reqHandler.sendFuncInfo(interFuncURL, GlobalFuncDeploy)
 
