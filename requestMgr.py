@@ -84,6 +84,7 @@ class requestMgr(ControllerBase):
                         charset='utf8', headers=HEADERS)
 
     def req_send_to_mano(self, req, **kwargs):
+        print("Received End-User's Request at: ", datetime.datetime.now())
         global usr_ip_task_dict, usr_ip_task_dict_Idx
         req_body = req.body
         LOG.debug(req_body)
@@ -98,7 +99,6 @@ class requestMgr(ControllerBase):
         print("interRegionPathComput: ", interRegionPathComput)
         mano_url = CDInterMANOURL + "req/interRegionPathComput"
         reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
-        print("Received End-User's Request at: ", datetime.datetime.now())
 
     def req_of_global_func_deploy(self, req, **kwargs):
         req_body = req.body
