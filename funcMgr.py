@@ -126,7 +126,7 @@ class FUNC_MGR_Controller(ControllerBase):
         print("intra_funcmgr_url: ", intra_funcmgr_url, "\n")
         r = reqHandler.sendPost(intra_funcmgr_url, reqIntraRegionalFuncOffload)
 
-    def request_of_regional_function_offloading(self, req):
+    def request_of_regional_func_offloading(self, req):
         req_body = req.body
         msg_dec = req_body.decode()
         jsonMsg = json.loads(msg_dec)
