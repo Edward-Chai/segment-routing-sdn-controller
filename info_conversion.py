@@ -557,7 +557,7 @@ class info_conversion(object):
         ipv6addrs = intraRegionPathComput["dcList"][0]["dcIngressIp6"].split(":")
         for idx in range(len(ipv6addrs)):
             intraRegionPathComput["dcList"][0]["dcIngressSID"] += ipv6addrs[idx]
-            if idx+2 != len(ipv6addrs):
+            if idx+1 < len(ipv6addrs):
                 intraRegionPathComput["dcList"][0]["dcIngressSID"] += ":"
         intraRegionPathComput["dcList"][0]["dcEgressSID"] = intraRegionPathComput["dcList"][0]["dcIngressSID"]
         intraRegionPathComput["dcList"][0]["machineList"][0]["taskIdInternal"] = jsonMsg1["funcList"][0]["taskIdInternal"]
