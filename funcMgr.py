@@ -118,6 +118,7 @@ class FUNC_MGR_Controller(ControllerBase):
         reqHandler = reqHandling()
         reqIntraRegionPathComput = infoConversion.req_of_intra_region_path_comput(jsonMsg)
         intra_mano_url = IntraMANOURL + 'req/intraRegionPathComput'
+        print("intra_mano_url: ", intra_mano_url, "\n")
         r = reqHandler.sendPost(intra_mano_url, reqIntraRegionPathComput)
         print("jsonMsg:", jsonMsg, "\n")
 
@@ -226,9 +227,10 @@ class funcMgr(app_manager.RyuApp):
                 f = open("funcInfoList", "r")
                 funcInfo = f.readlines()
                 f.close()
+                f = open("dcFuncList", "w")
+                infoConversion = info_conversion()
                 dcFuncInfoDict = infoConversion.formatDCFuncInfo(funcInfo)
                 jsonMsg = json.dumps(dcFuncInfoDict)
-                f = open("dcFuncList", "w")
                 f.write(jsonMsg)
                 f.close()
 
