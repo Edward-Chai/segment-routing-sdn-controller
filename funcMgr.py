@@ -229,7 +229,7 @@ class funcMgr(app_manager.RyuApp):
         # LOG.info(dcFuncInfoDict, "\n")
         # LOG.info("args: ", args, "\nkwargs: ", kwargs, "\n")
         # LOG.info("reqResult: ", reqResult)
-        print("jsonMsg: ", jsonMsg)
+        # print("jsonMsg: ", jsonMsg)
 
         mapper = wsgi.mapper
         # wsgi.registory['SR_API_Controller'] = self.data
