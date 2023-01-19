@@ -151,11 +151,11 @@ class FUNC_MGR_Controller(ControllerBase):
                     port=22,
                     username="root",
                     password="Zhaizehua960929")
-        command = "ip -6 route add 2001:200:0:6811:5000::/80 encap seg6 mode encap segs " + jsonMsg["dcIngressSID"] + " dev ens192"
+        command = "ip -6 route add 2001:200:0:6811:5000::/80 encap seg6 mode encap segs " + jsonMsg["dcIngressSID"] + " dev ens224"
         stdin, stdout, stderr = ssh.exec_command(command)
-        print(datetime.datetime.now(), " SRv6 setup conplete!\n")
         print("stdout: ", stdout.read().decode())
         print("stdeer: ", stderr.read().decode())
+        print(datetime.datetime.now(), " SRv6 setup conplete!\n")
     # def request_of_regional_func_offloading(self, req):
     #     req_body = req.body
     #     msg_dec = req_body.decode()
