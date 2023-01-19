@@ -98,6 +98,7 @@ class requestMgr(ControllerBase):
         print("interRegionPathComput: ", interRegionPathComput)
         mano_url = CDInterMANOURL + "req/interRegionPathComput"
         reqHandler.sendFuncInfo(mano_url, interRegionPathComput)
+        print("Received End-User's Request at: ", datetime.datetime.now())
 
     def req_of_global_func_deploy(self, req, **kwargs):
         req_body = req.body
