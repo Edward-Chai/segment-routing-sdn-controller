@@ -143,7 +143,7 @@ class FUNC_MGR_Controller(ControllerBase):
         jsonMsg = json.loads(msg_dec)
         infoConversion = info_conversion()
         reqHandler = reqHandling()
-        iproute2u = iproute2_utils()
+        # iproute2u = iproute2_utils()
         print("dc_jsonmsg: ", jsonMsg, "\n")
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
