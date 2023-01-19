@@ -178,7 +178,6 @@ result_of_inter_Region_path_computation = {
 
 request_of_intra_Region_path_computation = {
         "validTime": None,
-        "taskIdInternal": None,
         "funcList": []
     }
 
@@ -440,26 +439,26 @@ class info_conversion(object):
     def req_of_intra_region_path_comput(self, jsonMsg):
         reqIntraRegionPathComput = copy.deepcopy(request_of_intra_Region_path_computation)
         reqIntraRegionPathComput["validTime"] = jsonMsg["validTime"]
-        cdId_exist = 0
-        cdId_Idx = 0
-        for idx in range(len(cpId_taskId_mapping)):
-            if cpId_taskId_mapping[idx]["cdId"] == jsonMsg["cdId"]:
-                cdId_exist = 1
-                cdId_Idx = idx
-
-        if cdId_exist == 0 and len(cpId_taskId_mapping) >= 1:
-            mappingList = copy.deepcopy(cpId_taskId_mapping[0])
-            mappingList["cdId"] = jsonMsg["cdId"]
-            for item in jsonMsg["funcList"]:
-                mappingList["taskIdInternal"].append(item["taskIdInternal"])
-            cpId_taskId_mapping.append(mappingList)
-        elif cdId_exist == 0 and (cpId_taskId_mapping[0]["cdId"] is None):
-            cpId_taskId_mapping[0]["cdId"] = jsonMsg["cdId"]
-            for item in jsonMsg["funcList"]:
-                cpId_taskId_mapping[0]["taskIdInternal"].append(item["taskIdInternal"])
-        elif cdId_exist == 1:
-            for item in jsonMsg["funcList"]:
-                cpId_taskId_mapping[cdId_Idx]["taskIdInternal"].append(item["taskIdInternal"])
+        # cdId_exist = 0
+        # cdId_Idx = 0
+        # for idx in range(len(cpId_taskId_mapping)):
+        #     if cpId_taskId_mapping[idx]["cdId"] == jsonMsg["cdId"]:
+        #         cdId_exist = 1
+        #         cdId_Idx = idx
+        #
+        # if cdId_exist == 0 and len(cpId_taskId_mapping) >= 1:
+        #     mappingList = copy.deepcopy(cpId_taskId_mapping[0])
+        #     mappingList["cdId"] = jsonMsg["cdId"]
+        #     for item in jsonMsg["funcList"]:
+        #         mappingList["taskIdInternal"].append(item["taskIdInternal"])
+        #     cpId_taskId_mapping.append(mappingList)
+        # elif cdId_exist == 0 and (cpId_taskId_mapping[0]["cdId"] is None):
+        #     cpId_taskId_mapping[0]["cdId"] = jsonMsg["cdId"]
+        #     for item in jsonMsg["funcList"]:
+        #         cpId_taskId_mapping[0]["taskIdInternal"].append(item["taskIdInternal"])
+        # elif cdId_exist == 1:
+        #     for item in jsonMsg["funcList"]:
+        #         cpId_taskId_mapping[cdId_Idx]["taskIdInternal"].append(item["taskIdInternal"])
         reqIntraRegionPathComput["funcList"] = jsonMsg["funcList"]
         return reqIntraRegionPathComput
 
