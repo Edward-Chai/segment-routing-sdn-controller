@@ -155,8 +155,8 @@ class funcMgr(app_manager.RyuApp):
 
         # os.chdir("/home/edward/funcInfo/")
         # f = open("funcInfoList", "r")
-        region_id = ""
-        infoConversion = info_conversion()
+        # region_id = ""
+        # infoConversion = info_conversion()
         # funcInfo = f.readlines()
         # f.close()
         # f = open("monitorURL", "r")
