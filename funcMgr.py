@@ -107,8 +107,16 @@ class FUNC_MGR_Controller(ControllerBase):
         reqHandler = reqHandling()
         reqRegionalFuncDeploy = infoConversion.global_func_deploy_to_regional_func_deploy(jsonMsg)
         print("reqRegionalFuncDeploy: ", reqRegionalFuncDeploy, "\n")
-        # InterRegionFuncMgrURL = ""
-        # r = reqHandler.sendPost(InterRegionFuncMgrURL, reqRegionalFuncDeploy)
+        InterRegionFuncMgrURL = "http://[2001:200:0:6811:2000::1]:2010/funcMgr/req/regionalFuncDeploy"
+        r = reqHandler.sendPost(InterRegionFuncMgrURL, reqRegionalFuncDeploy)
+
+    def request_of_intra_region_path_comput(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        print("jsonMsg:", jsonMsg, "\n")
 
 
 class reqHandling(object):
@@ -243,6 +251,10 @@ class funcMgr(app_manager.RyuApp):
         uri = monitor_path + '/globalFuncDeploy'
         mapper.connect('funcMgr', uri,
                        controller=FUNC_MGR_Controller, action='request_of_regional_func_deploy',
+                       conditions=dict(method=['POST']))
+        uri = monitor_path + '/regionalFuncDeploy'
+        mapper.connect('funcMgr', uri,
+                       controller=FUNC_MGR_Controller, action='request_of_intra_region_path_comput',
                        conditions=dict(method=['POST']))
 
 '''
