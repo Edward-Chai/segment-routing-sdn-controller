@@ -180,8 +180,8 @@ class funcMgr(app_manager.RyuApp):
             f.close()
 
         funcMgrConfig = ""
-        if os.path.exists("config_funcMgr"):
-            f = open("config_funcMgr", "r")
+        if os.path.exists("config_funcmgr"):
+            f = open("config_funcmgr", "r")
             funcMgrConfig = f.readlines()
             f.close()
         else:
