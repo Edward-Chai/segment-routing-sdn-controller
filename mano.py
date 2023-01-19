@@ -102,6 +102,14 @@ class MANO(ControllerBase):
         resultOfInterPathComput = infoConversion.result_of_inter_region_path_comput(resourceInfo)
         r = reqHandler.sendPost(reqMgrURL, resultOfInterPathComput)
 
+    def inter_region_path_compututation(self, req):
+        req_body = req.body
+        LOG.debug(req_body)
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+        print("jsonMsg: ", jsonMsg, "\n")
 
 
     # def inter_region_path_comput(self, req):
@@ -183,9 +191,9 @@ class InitMonitor(app_manager.RyuApp):
 
 
         mano_req_path = '/req'
-        uri = mano_req_path + '/intra'
+        uri = mano_req_path + '/intraRegionPathComput'
         mapper.connect('req', uri,
-                       controller=MANO, action='req_of_regional_resource_info',
+                       controller=MANO, action='inter_region_path_compututation',
                        conditions=dict(method=['POST']))
         uri = mano_req_path + '/interRegionPathComput'
         mapper.connect('req', uri,

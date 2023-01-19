@@ -116,6 +116,9 @@ class FUNC_MGR_Controller(ControllerBase):
         jsonMsg = json.loads(msg_dec)
         infoConversion = info_conversion()
         reqHandler = reqHandling()
+        reqIntraRegionPathComput = infoConversion.req_of_intra_region_path_comput(jsonMsg)
+        intra_mano_url = IntraMANOURL + ''
+        r = reqHandler.sendPost(InterRegionFuncMgrURL, reqIntraRegionPathComput)
         print("jsonMsg:", jsonMsg, "\n")
 
 
