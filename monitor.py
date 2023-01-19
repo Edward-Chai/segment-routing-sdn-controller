@@ -98,13 +98,13 @@ class Monitor(ControllerBase):
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
 
-        if jsonMsg["dcId"] in intraRegionResourceInfoDCIdList:
+        if jsonMsg["dcid"] in intraRegionResourceInfoDCIdList:
             for Idx in range(len(intraRegionResourceInfoList)):
-                if intraRegionResourceInfoList[Idx]["dcId"] == jsonMsg["dcId"]:
+                if intraRegionResourceInfoList[Idx]["dcid"] == jsonMsg["dcid"]:
                     intraRegionResourceInfoList.pop(Idx)
                     intraRegionResourceInfoList.append(jsonMsg)
         else:
-            intraRegionResourceInfoDCIdList.append(jsonMsg["dcId"])
+            intraRegionResourceInfoDCIdList.append(jsonMsg["dcid"])
             intraRegionResourceInfoList.append(jsonMsg)
 
         primary_inter = PrimaryInterURL + 'monitor/inter'
