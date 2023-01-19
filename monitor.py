@@ -53,6 +53,9 @@ CDInterRegionURL = ""
 PrimaryInterURL = ""
 CDInterRegionResourceInfoStorage = []
 
+intraRegionResourceInfoList = []
+intraRegionResourceInfoDCIdList = []
+
 class Monitor(ControllerBase):
 
     def __init__(self, req, link, data, **config):
@@ -83,6 +86,7 @@ class Monitor(ControllerBase):
                         charset='utf8', headers=HEADERS)
 
     def dc_scope_to_intra(self, req, **kwargs):
+        global intraRegionResourceInfoList, intraRegionResourceInfoDCIdList
         req_body = req.body
         LOG.debug(req_body)
         print("req_body: ", req_body, "\n")
@@ -93,17 +97,27 @@ class Monitor(ControllerBase):
         infoConversion =info_conversion()
         reqHandler = reqHandling()
         intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
+
+        if jsonMsg["dcId"] in intraRegionResourceInfoDCIdList:
+            for Idx in range(len(intraRegionResourceInfoList)):
+                if intraRegionResourceInfoList[Idx]["dcId"] == jsonMsg["dcId"]:
+                    intraRegionResourceInfoList.pop(Idx)
+                    intraRegionResourceInfoList.append(jsonMsg)
+        else:
+            intraRegionResourceInfoDCIdList.append(jsonMsg["dcId"])
+            intraRegionResourceInfoList.append(jsonMsg)
+
         primary_inter = PrimaryInterURL + 'monitor/inter'
         # print("intraFuncInfo: ", intraFuncInfo)
         reqHandler.sendFuncInfo(primary_inter, intraFuncInfo)
 
 
     def req_for_intra(self, req, **kwargs):
-        global interRegionResourceInfoList
-        req_body = req.body
-        LOG.debug(req_body)
-        msg_dec = req_body.decode()
-        print("req.client_addr: ", req.client_addr)
+        # global interRegionResourceInfoList
+        # req_body = req.body
+        # LOG.debug(req_body)
+        # msg_dec = req_body.decode()
+        # print("req.client_addr: ", req.client_addr)
         # LOG.info("msg_dec: ", msg_dec)
         # jsonMsg = json.loads(msg_dec)
         # infoConversion =info_conversion()
@@ -111,7 +125,7 @@ class Monitor(ControllerBase):
         # intraFuncInfo = infoConversion.DCScopeToIntra(jsonMsg, region_id)
         # print("intraFuncInfo: ", intraFuncInfo)
         # reqHandler.sendFuncInfo(PrimaryInter, intraFuncInfo)
-        return Response(content_type='application/json', status=200, body=json.dumps(interRegionResourceInfoList),
+        return Response(content_type='application/json', status=200, body=json.dumps(intraRegionResourceInfoList),
                         charset='utf8', headers=HEADERS)
 
 

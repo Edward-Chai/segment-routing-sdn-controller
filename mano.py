@@ -110,7 +110,10 @@ class MANO(ControllerBase):
         infoConversion = info_conversion()
         reqHandler = reqHandling()
         print("jsonMsg: ", jsonMsg, "\n")
-
+        monitor_url = MonitorURL + 'monitor/req_intra'
+        r = reqHandler.sendGet(monitor_url)
+        resourceInfo = json.loads(r.text)
+        print("IntraResourceInfo: ", resourceInfo, "\n")
 
     # def inter_region_path_comput(self, req):
     #     global reqMgrURL
