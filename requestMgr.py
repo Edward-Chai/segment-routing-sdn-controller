@@ -147,7 +147,7 @@ class InitMonitor(app_manager.RyuApp):
         # region_id = ""
         # wsgi.registory['SR_API_Controller'] = self.data
 
-        global CDInterMonitorURL,CDInterFuncURL,CDInterMANOURL
+        global CDInterMonitorURL, CDInterFuncURL, CDInterMANOURL
         reqMgrConfig = ""
         if os.path.exists("config"):
             f = open("config", "r")
