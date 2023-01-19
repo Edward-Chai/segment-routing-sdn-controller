@@ -124,7 +124,7 @@ class FUNC_MGR_Controller(ControllerBase):
         reqIntraRegionalFuncOffload = infoConversion.req_of_regional_func_offloading(result)
         intra_funcmgr_url = IntraFuncURL_Inter + 'funcMgr/req/regionalFuncOffloading'
         print("intra_funcmgr_url: ", intra_funcmgr_url, "\n")
-        # r = reqHandler.sendPost(intra_funcmgr_url, reqIntraRegionalFuncOffload)
+        r = reqHandler.sendPost(intra_funcmgr_url, reqIntraRegionalFuncOffload)
 
     def request_of_regional_function_offloading(self, req):
         req_body = req.body
