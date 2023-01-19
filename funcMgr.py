@@ -154,7 +154,7 @@ class FUNC_MGR_Controller(ControllerBase):
                     username="root",
                     password="Zhaizehua960929")
         # command = "ip -6 route add 2001:200:0:6811:5000::/80 encap seg6 mode encap segs " + jsonMsg["dcIngressSID"] + " dev ens224"
-        command = "docker run -d -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg -stats -i ./videoplayback.mp4 -c:v libx264 output.mp4"
+        command = "docker run -d -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg -stats -i ../videos/input/videoplayback.mp4 -c:v libx264 output.mp4"
         stdin, stdout, stderr = ssh.exec_command(command)
         print("stdout: ", stdout.read().decode())
         print("stdeer: ", stderr.read().decode())
