@@ -485,6 +485,9 @@ class info_conversion(object):
         dcScopeFuncDeploy["machineList"] = jsonMsg["dcList"][0]["machineList"]
         return dcScopeFuncDeploy
 
+    def req_to_result_dc_scope_func_deploy(self, jsonMsg):
+        global result_of_dc_scope_function_deployment
+
     def result_of_regional_func_deployment(self, jsonMsg, regionId):
         global result_of_regional_function_deployment
         result_of_regional_function_deployment["regionId"] = regionId
@@ -583,4 +586,8 @@ class info_conversion(object):
             result_of_Global_Function_deployment["globalStatusCode"] = "0001"
 
         return result_of_Global_Function_deployment
-    "转换taskid，两个mano，来自各个region是否齐全"
+
+
+
+
+    # "转换taskid，两个mano，来自各个region是否齐全"

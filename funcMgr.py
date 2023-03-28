@@ -161,6 +161,14 @@ class FUNC_MGR_Controller(ControllerBase):
         print(datetime.datetime.now(), " Network Function deployment conplete!\n")
 
 
+    def result_dc_scope_func_deploy(self, req):
+        req_body = req.body
+        msg_dec = req_body.decode()
+        jsonMsg = json.loads(msg_dec)
+        infoConversion = info_conversion()
+        reqHandler = reqHandling()
+
+
 
     # def request_of_regional_func_offloading(self, req):
     #     req_body = req.body
